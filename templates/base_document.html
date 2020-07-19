@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}RPSK{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/tufte.css') }}">
+    <link rel="shortcut icon" href="static/favicon.ico">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <section>
+        <p class="subtitle">Ross P. Sullivan Kelly<label for="mn-who-am-i" class="margin-toggle"> ⌬</label>
+          <input type="checkbox" id="mn-who-am-i" class="margin-toggle">
+          <span class="marginnote">
+            I'm a data scientist, I was a chemist for a while before that.  I love (and do most of my work in) python.  My pronouns are he/him.
+          </span></p>
+    </section>
+    {% block content %}
+
+    {% endblock %}
+</body>
+</html>
