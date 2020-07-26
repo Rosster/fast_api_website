@@ -1,4 +1,5 @@
 aiofiles==0.5.0
+aiohttp
 click==7.1.2
 fastapi==0.59.0
 h11==0.9.0

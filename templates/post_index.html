@@ -1,0 +1,27 @@
+{% extends "base_document.html" %}
+{% block title %}Ross P Sullivan Kelly{% endblock %}
+{% block content %}
+<meta name="type" content="index">
+<meta name="timestamp" content="202007222136">
+<article>
+    <figure class="art-fill" title="This is a random piece of landscape art from the Met's collection.  Implementation details described in post: The Met Art API"></figure>
+
+    {% for post in posts %}
+    <hr>
+        {% if post.formatted_date and post.title %}
+        <blockquote>
+            <h2>
+                <a href="/?post={{post.title.lower()}}">
+                {{post.title}}
+                </a>
+            </h2>
+            <p>
+                <em>{{post.formatted_date}}</em>
+            </p>
+        </blockquote>
+        {% endif %}
+        {{ post.preview|safe}}
+    {% endfor %}
+</article>
+
+{% endblock %}

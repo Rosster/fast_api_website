@@ -1,0 +1,41 @@
+{% extends "base_document.html" %}
+{% block title %}Ross P Sullivan Kelly{% endblock %}
+{% block content %}
+<meta name="type" content="blog_post">
+<meta name="keywords" content="art api async">
+<meta name="timestamp" content="202007261252">
+<article>
+    <h1>The Met Art API</h1>
+    <preview>
+        <section>
+                <p>
+                    <span class="newthought">I can't really call myself an art person.</span> I love art, but I'm not
+                    exactly an educated art consumer.  I love landscapes, though, and I hate hosting my own images. I
+                    remember hearing something about the Met supporting an api for its collection and thought "gosh,
+                    wouldn't that be neat."
+                </p>
+        </section>
+    </preview>
+    <figure class="art-fill"></figure>
+    <section>
+        <p>
+            Said API is documented <a href="https://metmuseum.github.io/">here</a>, and it's pretty full featured.  You
+            basically get a bunch of <code>objectID</code> integers that correspond to a query (I haven't played around
+            with their query engine too much, although it seems...interestingly structured; hit refresh a few times
+            and you'll notice the variety of images that correspond to the query keyword "landscape").
+        </p>
+        <p>
+            I have a <code>/random_art</code><label for="random_art" class="margin-toggle sidenote-number"></label>
+            <input type="checkbox" id="random_art" class="margin-toggle"><span class="sidenote">
+            Check out the <em>automatically generated</em> (thanks FastAPI) documentation over at the <a href="/docs">docs</a>
+            page!  Ok, it's not actually that helpful at the moment. Should a website be a crypto api anyway?  Who knows!
+        </span>
+            endpoint setup on this website, and a messily implemented object that
+            does some cache-ing and rate limiting (of sorts).  It's messy because I'm trying to learn about async python
+            code and that's been a work in progress. I think I'm going to extend the endpoint to accommodate different
+            queries, but probably not just yet.
+        </p>
+
+    </section>
+</article>
+{% endblock %}
