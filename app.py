@@ -19,7 +19,6 @@ art_curator = classes.ArtApi(art_type='landscape')
 async def root(request: Request, post: Optional[str] = Query(None,
                                                              max_length=200,
                                                              regex=content_organizer.post_regex)):
-    content_organizer.refresh()
 
     if post and post.lower() in content_organizer.post_lookup:
         post = content_organizer.post_lookup[post]
@@ -31,6 +30,7 @@ async def root(request: Request, post: Optional[str] = Query(None,
     return templates.TemplateResponse("post_index.html",
                                       {'request': request,
                                        'posts': posts})
+
 
 @app.get('/random_art')
 async def random_art():

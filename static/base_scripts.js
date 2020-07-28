@@ -38,7 +38,7 @@ function smarten(a) {
   a = a.replace(/"/g, "\u201d");                            // closing doubles
   a = a.replace(/--/g, "\u2014");                           // em-dashes
   return a
-};
+}
 
 
 function random_id() {
@@ -47,9 +47,11 @@ function random_id() {
 
 class FineArt {
     constructor (el) {
-        // el should be a figure html element
+        // el should be a figure html element, but can be null
         this.el = el;
+        this.art_html = null;
         this.image_id = null;
+        this.get_art_html();
     }
 
     get random_art() {
@@ -71,23 +73,40 @@ class FineArt {
           <img src="${art_object.primaryImageSmall}" alt="${encodeURIComponent(art_object.title)}, ${encodeURIComponent(art_object.artistDisplayName)}">`;
     };
 
-    draw(){
-        this.random_art.then(art_object=>{
-            console.log(art_object);
-            this.el.innerHTML = this.build_html(art_object);
-        })
-    }
-}
-
-document.addEventListener("DOMContentLoaded", function(event) {
-    for (let el of document.getElementsByTagName('figure')){
-        if (el.classList.contains('art-fill')){
-            let art = new FineArt(el);
-            art.draw();
+    draw(el){
+        this.el = el;
+        if (this.art_html) {
+            el.innerHTML = this.art_html;
         }
     }
+
+    get_art_html(){
+        this.random_art.then(art_object=>{
+            this.art_html = this.build_html(art_object);
+            if (this.el) {
+                this.el.innerHTML = this.art_html;
+            }
+        })
+    }
+
+
+}
+
+// For performance, prepopulate fine are
+const art = new FineArt();
+
+window.onload = function () {
 
     for (let node of getTextNodesIn(document)) {
         node.textContent = smarten(node.textContent);
     }
+};
+
+document.addEventListener("DOMContentLoaded", function(event) {
+    for (let el of document.getElementsByTagName('figure')){
+        if (el.classList.contains('art-fill')){
+            art.draw(el);
+        }
+    }
+
 });
