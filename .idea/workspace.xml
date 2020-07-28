@@ -3,11 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/base_scripts.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/base_scripts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/rpsk-styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/rpsk-styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base_document.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base_document.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/fine_art_explanation.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/fine_art_explanation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/runtime.txt" beforeDir="false" afterPath="$PROJECT_DIR$/runtime.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -82,7 +78,8 @@
       <workItem from="1595170721926" duration="1473000" />
       <workItem from="1595172227521" duration="9493000" />
       <workItem from="1595183539485" duration="14084000" />
-      <workItem from="1595650124824" duration="19200000" />
+      <workItem from="1595650124824" duration="19595000" />
+      <workItem from="1595908036140" duration="23000" />
     </task>
     <task id="LOCAL-00001" summary="Added procfile?">
       <created>1595184213534</created>
@@ -119,7 +116,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595797157383</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Some improvements for speed, along with post edits.">
+      <created>1595907661054</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1595907661054</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -144,6 +148,7 @@
     <MESSAGE value="Fixed runtime :(" />
     <MESSAGE value="Art!!!" />
     <MESSAGE value="Got the first post going!  Added multiple post functionality, for that matter.  Along with some async refactoring and js for curly quotes!" />
-    <option name="LAST_COMMIT_MESSAGE" value="Got the first post going!  Added multiple post functionality, for that matter.  Along with some async refactoring and js for curly quotes!" />
+    <MESSAGE value="Some improvements for speed, along with post edits." />
+    <option name="LAST_COMMIT_MESSAGE" value="Some improvements for speed, along with post edits." />
   </component>
 </project>
