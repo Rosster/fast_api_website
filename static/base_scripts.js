@@ -45,6 +45,94 @@ function random_id() {
     return '_' + Math.random().toString(36).substr(2, 9);
 }
 
+
+class SpaceImage {
+    constructor (el) {
+        this.el = el;
+        this.image_type = el.dataset.image_type;
+        this.image_id = null;
+        this.n_tries = 0;
+    }
+
+    get random_image() {
+        return this.get_random_image();
+    }
+
+    async search_for_images(page) {
+        let url = `https://images-api.nasa.gov/search?q=${encodeURIComponent(this.image_type || 'nebula')}`;
+        if (page && page > 0) {
+            url = url + `&page=${page}`
+        }
+
+        return fetch(url).then(o => {
+            return o.json()
+        })
+    }
+
+    parse_item(item_obj) {
+        let preview = item_obj.links.filter(li => li.rel === 'preview');
+        let preview_image = null;
+        if (preview.length) {
+            preview_image = preview[0].href;
+        }
+        let data = null
+        if (item_obj.data.length) {
+            data = item_obj.data[0];
+        }
+        return {
+            data: data,
+            preview_href: preview_image
+        }
+    }
+
+    async get_random_image() {
+        if (this.n_tries > 5) {
+            return
+        }
+        return this.search_for_images().then(o => {
+            let total_results = o.collection.metadata.total_hits;
+            let page = parseInt(Math.random()*total_results/100)
+            if (page > 1) {
+                this.search_for_images(page).then(o => {
+                    let item_obj = this.parse_item(
+                        o.collection.items[Math.floor(Math.random()*o.collection.items.length)]);
+                    if (!item_obj.preview_href){
+                        this.n_tries ++;
+                        return this.get_random_image()
+                    } else {
+                        return item_obj
+                    }
+                })
+            } else {
+                let item_obj = this.parse_item(
+                        o.collection.items[Math.floor(Math.random()*o.collection.items.length)]);
+                    if (!item_obj.preview_href){
+                        this.n_tries ++;
+                        return this.get_random_image()
+                    } else {
+                        return item_obj
+                    }
+            }
+        });
+    }
+
+    build_html(image_data) {
+        this.image_id = random_id();
+
+        return `<label for="art-${this.image_id}" class="margin-toggle">⌬</label><input type="checkbox" id="art-${this.image_id}" class="margin-toggle">
+<span class="marginnote">${image_data.data.secondary_creator || image_data.data.center}, <em>${image_data.data.title}</em>, ${image_data.data.date_created}.</span>
+          <img src="${image_data.preview_href}" alt="${encodeURIComponent(image_data.data.title)}">`;
+    }
+
+    draw () {
+        this.random_image.then(image_data=>{
+            this.el.innerHTML = this.build_html(image_data);
+        })
+    }
+
+}
+
+
 class FineArt {
     constructor (el) {
         this.el = el;
@@ -95,6 +183,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
         if (el.classList.contains('art-fill')){
             let art = new FineArt(el);
             art.draw();
+        } else if (el.classList.contains('space-fill')) {
+            let space = new SpaceImage(el);
+            space.draw();
         }
     }
 
