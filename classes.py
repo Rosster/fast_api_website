@@ -7,7 +7,7 @@ import os
 from random import sample
 import re
 from time import time
-from typing import List, Optional
+from typing import List, Optional, Dict
 from urllib.parse import quote_plus, quote
 
 from expiringdict import ExpiringDict
@@ -184,3 +184,13 @@ class ArtApi:
         self.last_object = art_object
         self.last_accessed = time()
         return art_object
+
+
+class Curator:
+    def __init__(self):
+        self.collections: Dict[str, ArtApi] = {}
+
+    async def get_sample(self, art_type: str):
+        if art_type not in self.collections:
+            self.collections[art_type] = ArtApi(art_type=art_type)
+        return await self.collections[art_type].random_object

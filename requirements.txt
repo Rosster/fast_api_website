@@ -1,13 +1,13 @@
 aiofiles==0.5.0
 aiohttp
 click==7.1.2
-fastapi==0.59.0
+fastapi
 h11==0.9.0
 Jinja2==2.11.2
 MarkupSafe==1.1.1
 pydantic==1.6.1
 starlette==0.13.4
-uvicorn==0.11.6
+uvicorn==0.11.7
 websockets==8.1
 gunicorn
 expiringdict==1.2.1

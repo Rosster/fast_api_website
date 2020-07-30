@@ -47,11 +47,10 @@ function random_id() {
 
 class FineArt {
     constructor (el) {
-        // el should be a figure html element, but can be null
         this.el = el;
-        this.art_html = null;
+        this.art_type = el.dataset.art_type;
+
         this.image_id = null;
-        this.get_art_html();
     }
 
     get random_art() {
@@ -59,7 +58,12 @@ class FineArt {
     }
 
     async request_random_art() {
-        return fetch("/random_art").then(o => {
+        let url = '/random_art';
+        if (this.art_type) {
+            url = url + `?art_type=${this.art_type}`
+        }
+        return fetch(url,
+            {credentials: 'same-origin'}).then(o => {
             return o.json()
         })
     }
@@ -69,31 +73,15 @@ class FineArt {
 
         return `<label for="art-${this.image_id}" class="margin-toggle">⌬</label><input type="checkbox" id="art-${this.image_id}" class="margin-toggle">
 <span class="marginnote">${art_object.artistDisplayName || art_object.culture}, <em>${art_object.title}</em>, ${art_object.objectDate || "Unknown Date"}.</span>
-
           <img src="${art_object.primaryImageSmall}" alt="${encodeURIComponent(art_object.title)}, ${encodeURIComponent(art_object.artistDisplayName)}">`;
     };
 
     draw(el){
-        this.el = el;
-        if (this.art_html) {
-            el.innerHTML = this.art_html;
-        }
-    }
-
-    get_art_html(){
         this.random_art.then(art_object=>{
-            this.art_html = this.build_html(art_object);
-            if (this.el) {
-                this.el.innerHTML = this.art_html;
-            }
+            this.el.innerHTML = this.build_html(art_object);
         })
     }
-
-
 }
-
-// For performance, prepopulate fine are
-const art = new FineArt();
 
 window.onload = function () {
 
@@ -105,7 +93,8 @@ window.onload = function () {
 document.addEventListener("DOMContentLoaded", function(event) {
     for (let el of document.getElementsByTagName('figure')){
         if (el.classList.contains('art-fill')){
-            art.draw(el);
+            let art = new FineArt(el);
+            art.draw();
         }
     }
 

@@ -12,7 +12,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory='templates')
 
 content_organizer = classes.ContentOrganizer()
-art_curator = classes.ArtApi(art_type='landscape')
+art_curator = classes.Curator()
 
 
 @app.get('/')
@@ -33,5 +33,14 @@ async def root(request: Request, post: Optional[str] = Query(None,
 
 
 @app.get('/random_art')
-async def random_art():
-    return await art_curator.random_object
+async def random_art(art_type: Optional[str] = Query(None,
+                                                     max_length=200,
+                                                     regex=f"^[a-z]+$")):
+    if not art_type:
+        art_type = 'landscape'
+
+    return await art_curator.get_sample(art_type)
+
+# Instructions came from here: https://www.tutlinks.com/create-and-deploy-fastapi-app-to-heroku/
+# Here: https://www.uvicorn.org/deployment/
+# And here https://edwardtufte.github.io/tufte-css/
