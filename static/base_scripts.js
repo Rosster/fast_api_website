@@ -47,6 +47,7 @@ function random_id() {
 
 
 class SpaceImage {
+    // Thanks to our friends at NASA! https://images.nasa.gov/docs/images.nasa.gov_api_docs.pdf
     constructor (el) {
         this.el = el;
         this.image_type = el.dataset.image_type;
@@ -96,7 +97,7 @@ class SpaceImage {
                 this.search_for_images(page).then(o => {
                     let item_obj = this.parse_item(
                         o.collection.items[Math.floor(Math.random()*o.collection.items.length)]);
-                    if (!item_obj.preview_href){
+                    if (!item_obj.preview_href || !item_obj.data){
                         this.n_tries ++;
                         return this.get_random_image()
                     } else {
@@ -106,7 +107,7 @@ class SpaceImage {
             } else {
                 let item_obj = this.parse_item(
                         o.collection.items[Math.floor(Math.random()*o.collection.items.length)]);
-                    if (!item_obj.preview_href){
+                    if (!item_obj.preview_href || !item_obj.data){
                         this.n_tries ++;
                         return this.get_random_image()
                     } else {
@@ -126,6 +127,9 @@ class SpaceImage {
 
     draw () {
         this.random_image.then(image_data=>{
+            if (!image_data){
+                return this.draw();
+            }
             this.el.innerHTML = this.build_html(image_data);
         })
     }

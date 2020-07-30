@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="Update to python 3.8.5">
+    <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dev Notebook.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Dev Notebook.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/base_scripts.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/base_scripts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/post_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/post_index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +75,7 @@
       <workItem from="1595650124824" duration="19595000" />
       <workItem from="1595908036140" duration="6013000" />
       <workItem from="1596082726685" duration="88000" />
-      <workItem from="1596083144064" duration="3181000" />
+      <workItem from="1596083144064" duration="3729000" />
     </task>
     <task id="LOCAL-00001" summary="Added procfile?">
       <created>1595184213534</created>
@@ -128,7 +126,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595908100258</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Added SPAAAACE">
+      <created>1596086403699</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1596086403699</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -154,6 +159,17 @@
     <MESSAGE value="Got the first post going!  Added multiple post functionality, for that matter.  Along with some async refactoring and js for curly quotes!" />
     <MESSAGE value="Some improvements for speed, along with post edits." />
     <MESSAGE value="Update to python 3.8.5" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update to python 3.8.5" />
+    <MESSAGE value="Added SPAAAACE" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added SPAAAACE" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="306" y="5" key="CommitChangelistDialog2" timestamp="1596086402998">
+      <screen x="0" y="0" width="1368" height="872" />
+    </state>
+    <state x="306" y="5" key="CommitChangelistDialog2/0.0.1368.872@0.0.1368.872" timestamp="1596086402998" />
+    <state x="277" y="169" key="Vcs.Push.Dialog.v2" timestamp="1596086405915">
+      <screen x="0" y="0" width="1368" height="872" />
+    </state>
+    <state x="277" y="169" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1596086405915" />
   </component>
 </project>
