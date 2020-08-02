@@ -1,0 +1,142 @@
+{% extends "base_document.html" %}
+{% block title %}Ross P Sullivan Kelly{% endblock %}
+{% block content %}
+<meta name="type" content="blog_post">
+<meta name="keywords" content="space nasa api js">
+<meta name="timestamp" content="202008020827">
+<article>
+    <h1>NASA Image API</h1>
+    <preview>
+        <section>
+                <p>
+                    Now the NASA api!  This time, just javascript.
+                </p>
+        </section>
+    </preview>
+    <figure class="space-fill" data-image_type="jupiter"></figure>
+    <section>
+        <p>
+            That art api thing was neat, so I was poking around to see if I could find some other fun ones.  Lo and
+            behold, our friends at Nasa have a <a href="https://api.nasa.gov/">spectacular set of apis</a>!  Serious
+            people (not me), can use those for all manner of technical documentation and scientific document parsing,
+            which might be a pretty cool natural language project for another day.
+            <label for="spacy_joke" class="margin-toggle sidenote-number"></label>
+            <input type="checkbox" id="spacy_joke" class="margin-toggle"><span class="sidenote">
+            Really putting the <strong>space</strong> in spaCy!  I kill me.</span>
+        </p>
+        <p>
+            <span class="newthought">Since I'm not serious</span>, and the only purpose the blog appears to exhibit so
+            far is finding other people's images<label for="public_domain" class="margin-toggle sidenote-number"></label>
+            <input type="checkbox" id="public_domain" class="margin-toggle"><span class="sidenote">
+            Public domain images!  I'm not a monster!</span> to share, I gravitated (hee hee, space puns) towards
+            the <a href="https://images.nasa.gov/docs/images.nasa.gov_api_docs.pdf">images api</a>, which, amazingly,
+            permissive enough to allow client-side requests (normally a big no-no, because clientside JS on most sites
+            is like a sandbox filled with ticks and the browser doesn't let them escape).  Anyway, saintly NASA clearly
+            believes in a kinder, gentler internet, so they let anyone run javascript to request image data!
+        </p>
+        <p>
+            There's the little class that does the work.  It gets attached to a <code>&lt;figure&gt;</code> element,
+            and then reads the <code>image_type</code> data attribute to see what type of space picture we want.  The
+            api returns a page of 100 results, but also the metadata with the total number of results.  So, because
+            for some bizarre reason I want a totally random selection, it grabs that metadata first and gets a random
+            number from that.  Then it may search for another page.  I'm using the blissfully concise
+            <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"><code>fetch</code> API</a>,
+            which is great, because I grew up in jQuery land and it's a lot like <code>$.post</code> or <code>$.get</code>.
+            I'm sure it's different for a million reasons but I bet there are other wonderful posts that can go into that,
+            written by people who know things.
+        </p>
+        <p>
+            The little fella doesn't work every time, which I chalk up to the API limiting sassy behavior, so that's
+            where the retries come in.  There's probably a better way to do that, I'm thinking about it...
+        </p>
+        <pre>
+            <code>
+class SpaceImage {
+    // Thanks to our friends at NASA! https://images.nasa.gov/docs/images.nasa.gov_api_docs.pdf
+    constructor (el) {
+        this.el = el;
+        this.image_type = el.dataset.image_type;
+        this.image_id = null;
+        this.n_tries = 0;
+    }
+
+    async search_for_images(page) {
+        let url = `https://images-api.nasa.gov/search?q=${encodeURIComponent(this.image_type || 'nebula')}`;
+        if (page && page > 0) {
+            url = url + `&page=${page}`
+        }
+
+        return fetch(url).then(o => {
+            return o.json()
+        })
+    }
+
+    parse_item(item_obj) {
+        let preview = item_obj.links.filter(li => li.rel === 'preview');
+        let preview_image = null;
+        if (preview.length) {
+            preview_image = preview[0].href;
+        }
+        let data = null
+        if (item_obj.data.length) {
+            data = item_obj.data[0];
+        }
+        return {
+            data: data,
+            preview_href: preview_image
+        }
+    }
+
+    async get_random_image() {
+        return this.search_for_images().then(o => {
+            let total_results = o.collection.metadata.total_hits;
+            let page = parseInt(Math.random()*total_results/100)
+            if (page > 1) {
+                this.search_for_images(page).then(o => {
+                    return this.parse_item(
+                        o.collection.items[Math.floor(Math.random()*o.collection.items.length)]);
+                })
+            } else {
+                return this.parse_item(
+                        o.collection.items[Math.floor(Math.random()*o.collection.items.length)]);
+            }
+        });
+    }
+
+    build_html(image_data) {
+        this.image_id = random_id();
+
+        return `&lt;label for="art-${this.image_id}" class="margin-toggle"&gt;⌬&lt;/label&gt;
+                &lt;input type="checkbox" id="art-${this.image_id}" class="margin-toggle"&gt;
+                &lt;span class="marginnote"&gt;${image_data.data.secondary_creator || image_data.data.center},&lt;em&gt;
+                ${image_data.data.title}&lt;/em&gt;, ${image_data.data.date_created}.&lt;/span&gt;
+                &lt;img src="${image_data.preview_href}" alt="${encodeURIComponent(image_data.data.title)}"&gt;`;
+    }
+
+    draw () {
+        if (this.n_tries > 10) {
+            console.log(`The api is struggling, tried ${this.n_tries} times, to no avail!`);
+            return
+        }
+        this.get_random_image().then(image_data=>{
+            if (!image_data){
+                this.n_tries ++;
+                let cls = this;
+                return setTimeout(function(){
+                    cls.draw();},
+            200);
+            }
+            this.el.innerHTML = this.build_html(image_data);
+        })
+    }
+}
+
+            </code>
+        </pre>
+        <p>
+            Gosh, sure looks like I could do with some syntax highlighting.  That'll be a quest for next time.  Cheers!
+        </p>
+
+    </section>
+</article>
+{% endblock %}

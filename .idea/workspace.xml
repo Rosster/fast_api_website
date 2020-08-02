@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/templates/nasa_api-post.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/base_scripts.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/base_scripts.js" afterDir="false" />
     </list>
@@ -75,7 +76,8 @@
       <workItem from="1595650124824" duration="19595000" />
       <workItem from="1595908036140" duration="6013000" />
       <workItem from="1596082726685" duration="88000" />
-      <workItem from="1596083144064" duration="3729000" />
+      <workItem from="1596083144064" duration="4564000" />
+      <workItem from="1596158473112" duration="4986000" />
     </task>
     <task id="LOCAL-00001" summary="Added procfile?">
       <created>1595184213534</created>
@@ -133,7 +135,14 @@
       <option name="project" value="LOCAL" />
       <updated>1596086403699</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="A bit of retry &quot;logic&quot;">
+      <created>1596087114769</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1596087114769</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -160,16 +169,21 @@
     <MESSAGE value="Some improvements for speed, along with post edits." />
     <MESSAGE value="Update to python 3.8.5" />
     <MESSAGE value="Added SPAAAACE" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added SPAAAACE" />
+    <MESSAGE value="A bit of retry &quot;logic&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="A bit of retry &quot;logic&quot;" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="306" y="5" key="CommitChangelistDialog2" timestamp="1596086402998">
+    <state x="277" y="77" key="#Plugins" timestamp="1596158745831">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state x="306" y="5" key="CommitChangelistDialog2/0.0.1368.872@0.0.1368.872" timestamp="1596086402998" />
-    <state x="277" y="169" key="Vcs.Push.Dialog.v2" timestamp="1596086405915">
+    <state x="277" y="77" key="#Plugins/0.0.1368.872@0.0.1368.872" timestamp="1596158745831" />
+    <state x="306" y="5" key="CommitChangelistDialog2" timestamp="1596087114101">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state x="277" y="169" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1596086405915" />
+    <state x="306" y="5" key="CommitChangelistDialog2/0.0.1368.872@0.0.1368.872" timestamp="1596087114101" />
+    <state x="277" y="169" key="Vcs.Push.Dialog.v2" timestamp="1596087116858">
+      <screen x="0" y="0" width="1368" height="872" />
+    </state>
+    <state x="277" y="169" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1596087116858" />
   </component>
 </project>

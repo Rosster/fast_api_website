@@ -55,10 +55,6 @@ class SpaceImage {
         this.n_tries = 0;
     }
 
-    get random_image() {
-        return this.get_random_image();
-    }
-
     async search_for_images(page) {
         let url = `https://images-api.nasa.gov/search?q=${encodeURIComponent(this.image_type || 'nebula')}`;
         if (page && page > 0) {
@@ -76,7 +72,7 @@ class SpaceImage {
         if (preview.length) {
             preview_image = preview[0].href;
         }
-        let data = null
+        let data = null;
         if (item_obj.data.length) {
             data = item_obj.data[0];
         }
@@ -87,32 +83,17 @@ class SpaceImage {
     }
 
     async get_random_image() {
-        if (this.n_tries > 5) {
-            return
-        }
         return this.search_for_images().then(o => {
             let total_results = o.collection.metadata.total_hits;
             let page = parseInt(Math.random()*total_results/100)
             if (page > 1) {
                 this.search_for_images(page).then(o => {
-                    let item_obj = this.parse_item(
+                    return this.parse_item(
                         o.collection.items[Math.floor(Math.random()*o.collection.items.length)]);
-                    if (!item_obj.preview_href || !item_obj.data){
-                        this.n_tries ++;
-                        return this.get_random_image()
-                    } else {
-                        return item_obj
-                    }
                 })
             } else {
-                let item_obj = this.parse_item(
+                return this.parse_item(
                         o.collection.items[Math.floor(Math.random()*o.collection.items.length)]);
-                    if (!item_obj.preview_href || !item_obj.data){
-                        this.n_tries ++;
-                        return this.get_random_image()
-                    } else {
-                        return item_obj
-                    }
             }
         });
     }
@@ -126,14 +107,21 @@ class SpaceImage {
     }
 
     draw () {
-        this.random_image.then(image_data=>{
+        if (this.n_tries > 10) {
+            console.log(`The api is struggling, tried ${this.n_tries} times, to no avail!`);
+            return
+        }
+        this.get_random_image().then(image_data=>{
             if (!image_data){
-                return this.draw();
+                this.n_tries ++;
+                let cls = this;
+                return setTimeout(function(){
+                    cls.draw();},
+            200);
             }
             this.el.innerHTML = this.build_html(image_data);
         })
     }
-
 }
 
 
