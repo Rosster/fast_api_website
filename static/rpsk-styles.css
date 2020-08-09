@@ -1,3 +1,7 @@
 figure.art-fill img {
     border: 1px solid #cccccc;
 }
+
+.hljs {
+    background: #fffff8 !important;
+}

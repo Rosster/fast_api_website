@@ -117,7 +117,7 @@ class SpaceImage {
                 let cls = this;
                 return setTimeout(function(){
                     cls.draw();},
-            200);
+            500);
             }
             this.el.innerHTML = this.build_html(image_data);
         })
@@ -163,10 +163,18 @@ class FineArt {
     }
 }
 
+// From here: https://stackoverflow.com/questions/8729193/how-to-get-all-parent-nodes-of-given-element-in-pure-javascript
+const parents = node => (node.parentElement ? parents(node.parentElement) : []).concat([node]);
+
+hljs.initHighlightingOnLoad();
+
 window.onload = function () {
 
     for (let node of getTextNodesIn(document)) {
-        node.textContent = smarten(node.textContent);
+        let parent_tags = parents(node).map(p => p ? p.tagName : null);
+        if (!parent_tags.includes('CODE')){
+            node.textContent = smarten(node.textContent);
+        }
     }
 };
 
