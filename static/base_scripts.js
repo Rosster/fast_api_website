@@ -61,10 +61,13 @@ class SpaceImage {
             url = url + `&page=${page}`
         }
 
-        return fetch(url).then(o => {
-            return o.json()
-        })
+        return fetch(url, {mode:'cors'})
+            .then(o => {
+                return o.json()
+            })
+            .catch(err => console.log(err))
     }
+
 
     parse_item(item_obj) {
         let preview = item_obj.links.filter(li => li.rel === 'preview');
@@ -169,7 +172,6 @@ const parents = node => (node.parentElement ? parents(node.parentElement) : []).
 hljs.initHighlightingOnLoad();
 
 window.onload = function () {
-
     for (let node of getTextNodesIn(document)) {
         let parent_tags = parents(node).map(p => p ? p.tagName : null);
         if (!parent_tags.includes('CODE')){

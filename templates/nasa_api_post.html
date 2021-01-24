@@ -1,10 +1,10 @@
 {% extends "base_document.html" %}
-{% block title %}Ross P Sullivan Kelly{% endblock %}
+{% block title %}NASA Image API{% endblock %}
 {% block content %}
 <meta name="type" content="blog_post">
 <meta name="keywords" content="space nasa api js">
 <meta name="timestamp" content="202008020827">
-<article>
+<article class="no-top-padding">
     <h1>NASA Image API</h1>
     <preview>
         <section>
@@ -77,7 +77,7 @@ class SpaceImage {
         if (preview.length) {
             preview_image = preview[0].href;
         }
-        let data = null
+        let data = null;
         if (item_obj.data.length) {
             data = item_obj.data[0];
         }

@@ -5,3 +5,7 @@ figure.art-fill img {
 .hljs {
     background: #fffff8 !important;
 }
+
+.no-top-padding {
+    padding-top: 0;
+}

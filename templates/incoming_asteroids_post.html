@@ -1,0 +1,59 @@
+{% extends "base_document.html" %}
+{% block title %}Nasa Near Earth Object API{% endblock %}
+{% block additional_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/0.5.7/chartjs-plugin-annotation.js"></script>
+<script src="https://d3js.org/d3-color.v1.min.js"></script>
+<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="{{ url_for('static', path='/asteroid_plot.js') }}"></script>
+{% endblock %}
+{% block content %}
+<meta name="type" content="blog_post">
+<meta name="keywords" content="space nasa api js python asteroids apocalypse async chartjs">
+<meta name="timestamp" content="202101222219">
+<article class="no-top-padding">
+    <h1>NASA Asteroid API</h1>
+    <preview>
+        <section>
+                <p>
+                    We plot some oncoming near earth objects
+                    (c.o. another delightful NASA api).
+                </p>
+        </section>
+    </preview>
+    <figure class="fullwidth">
+        <canvas id="myChart"></canvas>
+    </figure>
+    <section>
+        <p>
+            I do a decent amount of data vis in my day job, but mostly
+            in python (I use Bokeh for the interactive stuff, matplotlib for the quick and dirty "what
+            does the dataframe look like" sort of questions), but not much clientside charting.  So,
+            mostly because I wasn't able to style a bokeh plot as I
+            wanted<label for="bokeh_struggle" class="margin-toggle sidenote-number"></label>
+            <input type="checkbox" id="bokeh_struggle" class="margin-toggle"><span class="sidenote">
+            You might have noticed that Tufte.css doesn't use totally white backgrounds
+            or totally black text, it uses <code>#fffff8</code> and <code>#111111</code>.
+            So, I wanted to make the background of my bubble plot look like that, but couldn't,
+            so here we are.</span>, I decided to use Chart.js, which I'm decidedly <em>meh</em> on.
+        </p>
+        <p>
+            I think I noticed it when I was writing my last post; NASA also has a pretty cool near
+            earth object api, and I got it in my head to make a live bubble chart delightfully
+            visualizing our imminent demise.  This was fun-ish because I (a) learned a bit about
+            Chart.js<label for="chart_js" class="margin-toggle sidenote-number"></label>
+            <input type="checkbox" id="chart_js" class="margin-toggle"><span class="sidenote">
+            Mostly I've learned that I don't love it.  So far it just seems a bit more limited
+            than python tools, but t.b.h. that might just be my lack of familiarity, and the fact
+            that I'm more used to matplotlib style data inputs. Then again, it's always good to have
+            a clientside option for visualizations, especially interactive ones.  Also, the animations
+            seem a bit superfluous.</span> and (b) I muddled through some more async python.
+        </p>
+        <p>
+            I'm going to write more about the process and the code later, but I've got to clean it up first,
+            and I wanted to post something because it's been forever.
+        </p>
+    </section>
+</article>
+{% endblock %}

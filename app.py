@@ -13,6 +13,7 @@ templates = Jinja2Templates(directory='templates')
 
 content_organizer = classes.ContentOrganizer()
 art_curator = classes.Curator()
+asteroids = classes.AsteroidAstronomer(n_days_from_current=6) # One week
 
 
 @app.get('/')
@@ -40,6 +41,12 @@ async def random_art(art_type: Optional[str] = Query(None,
         art_type = 'landscape'
 
     return await art_curator.get_sample(art_type)
+
+
+@app.get('/asteroid_plot_data')
+async def asteroid_plot_data():
+    return await asteroids.get_asteroid_data_for_plot()
+
 
 # Instructions came from here: https://www.tutlinks.com/create-and-deploy-fastapi-app-to-heroku/
 # Here: https://www.uvicorn.org/deployment/

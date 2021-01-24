@@ -8,6 +8,9 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
 
     <script src="{{ url_for('static', path='/base_scripts.js') }}"></script>
+    {% block additional_scripts %}
+
+    {% endblock %}
     <link rel="stylesheet" href="{{ url_for('static', path='/tufte.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', path='/rpsk-styles.css') }}">
     <link rel="shortcut icon" href="static/favicon.ico">

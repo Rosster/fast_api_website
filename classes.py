@@ -1,7 +1,7 @@
 import asyncio
 import aiohttp
 import concurrent.futures
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 import os
 from random import sample
@@ -23,9 +23,9 @@ def custom_strftime(datetime_format, t):
     return t.strftime(datetime_format).replace('{S}', str(t.day) + suffix(t.day))
 
 
-async def fetch(session: aiohttp.client.ClientSession, url: str):
+async def fetch(session: aiohttp.client.ClientSession, url: str, **kwargs) -> dict:
     """From here: https://stackoverflow.com/questions/22190403/how-could-i-use-requests-in-asyncio/50312981#50312981"""
-    async with session.get(url) as response:
+    async with session.get(url, **kwargs) as response:
         return await response.json()
 
 
@@ -194,3 +194,108 @@ class Curator:
         if art_type not in self.collections:
             self.collections[art_type] = ArtApi(art_type=art_type)
         return await self.collections[art_type].random_object
+
+
+class AsteroidAstronomer:
+    def __init__(self, n_days_from_current=6):
+        assert n_days_from_current <=6, f"The feed limit is 7 days total."
+        self.n_days = n_days_from_current # can't be more than 6
+        self._metadata = None
+        self._asteroid_data = None
+
+    @property
+    def start_date(self):
+        return datetime.now()
+
+    @property
+    def end_date(self):
+        return datetime.now() + timedelta(days=self.n_days)
+
+    @staticmethod
+    def get_request_metadata(request_json: dict):
+        day_neo_li_dict = request_json['near_earth_objects']
+        return {day: len(neo_li) for day, neo_li in day_neo_li_dict.items()}
+
+    @staticmethod
+    def parse_asteroid_data(asteroid: dict):
+        link = asteroid['nasa_jpl_url']
+        name = asteroid['name']
+        avg_width = (asteroid['estimated_diameter']['meters']['estimated_diameter_min']
+                     + asteroid['estimated_diameter']['meters']['estimated_diameter_max']) / 2
+        velocity_km_s = float(asteroid['close_approach_data'][0]['relative_velocity']['kilometers_per_second'])
+        approach_date = datetime.fromtimestamp(asteroid['close_approach_data'][0]['epoch_date_close_approach'] / 1000)
+        potentially_hazardous = int(asteroid['is_potentially_hazardous_asteroid'])
+        miss_distance_km = float(asteroid['close_approach_data'][0]['miss_distance']['kilometers'])
+        return dict(link=link,
+                    name=name,
+                    width_m=avg_width,
+                    velocity_km_s=velocity_km_s,
+                    approach_date=approach_date,
+                    potentially_hazardous=potentially_hazardous,
+                    miss_distance_km=miss_distance_km)
+
+    async def _query_neo_data(self) -> dict:
+        async with aiohttp.ClientSession() as session:
+            req = await fetch(
+                session,
+                f"https://api.nasa.gov/neo/rest/v1/feed",
+                params={'api_key': os.environ['NASA_API_KEY'],
+                        'start_date': self.start_date.strftime("%Y-%m-%d"),
+                        'end_date': self.end_date.strftime("%Y-%m-%d")}
+            )
+        return req
+
+    async def _build_asteroid_data(self) -> (dict, list):
+        try:
+            request = await self._query_neo_data()
+            metadata = self.get_request_metadata(request)
+        except Exception as err:
+            metadata = dict(error=True,
+                            message=str(err))
+            print('Error obtaining asteroid data!')
+            return metadata, []
+
+        asteroid_data = list(map(self.parse_asteroid_data,
+                                 [rock for day in request['near_earth_objects'].values()
+                                  for rock in day]))
+        return metadata, asteroid_data
+
+    @property
+    async def raw_asteroid_data(self):
+        # First we check to see if we need data
+        if not self._metadata or self._metadata.get('error'):
+            self._metadata, self._asteroid_data = await self._build_asteroid_data()
+        else:
+            if self.start_date.strftime('%Y-%m-%d') in self._metadata and self.end_date.strftime('%Y-%m-%d') in self._metadata:
+                return self._asteroid_data
+            else:
+                self._metadata, self._asteroid_data = await self._build_asteroid_data()
+        return self._asteroid_data
+
+    async def get_asteroid_data_for_plot(self) -> dict:
+        datasets = {'potentially_hazardous': [],
+                    'safe': []}
+        for rock in await self.raw_asteroid_data:
+            if rock['potentially_hazardous']:
+                datasets['potentially_hazardous'].append(dict(x=rock['approach_date'].timestamp(),
+                                                              y=rock['miss_distance_km'],
+                                                              width=rock['width_m'],
+                                                              name=rock['name'].strip('()') if (rock['name'][0] ==
+                                                                                               rock['name'][-1]) and
+                                                                                              rock['name'][
+                                                                                                  0] in '()' else rock[
+                                                                  'name'],
+                                                              speed=rock['velocity_km_s'])
+                                                         )
+            else:
+                datasets['safe'].append(dict(x=rock['approach_date'].timestamp(),
+                                             y=rock['miss_distance_km'],
+                                             width=rock['width_m'],
+                                             name=rock['name'].strip('()') if (rock['name'][0] == rock['name'][-1]) and
+                                                                             rock['name'][0] in '()' else rock['name'],
+                                             speed=rock['velocity_km_s'])
+                                        )
+
+        # This is needed for charts.js
+        return dict(datasets=[dict(label=k,
+                    data=datasets[k]) for k in datasets])
