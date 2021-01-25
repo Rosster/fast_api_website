@@ -3,6 +3,7 @@ from typing import Optional
 from fastapi import FastAPI, Request, Query
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.responses import RedirectResponse
 
 import classes
 
@@ -31,6 +32,18 @@ async def root(request: Request, post: Optional[str] = Query(None,
     return templates.TemplateResponse("post_index.html",
                                       {'request': request,
                                        'posts': posts})
+
+
+@app.get('/posts/{post}')
+async def post_page(request: Request, post: Optional[str] = Query(None,
+                                                                  max_length=200,
+                                                                  regex=content_organizer.post_regex)):
+    if post and post.lower() in content_organizer.post_lookup:
+        post = content_organizer.post_lookup[post]
+        return templates.TemplateResponse(post.template_file,
+                                          {'request': request})
+    else:
+        return RedirectResponse('/')
 
 
 @app.get('/random_art')
