@@ -16,12 +16,12 @@ function getTextNodesIn(elem, opt_fnFilter) {
   if (elem) {
     for (var nodes = elem.childNodes, i = nodes.length; i--;) {
       var node = nodes[i], nodeType = node.nodeType;
-      if (nodeType == 3) {
+      if (nodeType === 3) {
         if (!opt_fnFilter || opt_fnFilter(node, elem)) {
           textNodes.push(node);
         }
       }
-      else if (nodeType == 1 || nodeType == 9 || nodeType == 11) {
+      else if (nodeType === 1 || nodeType === 9 || nodeType === 11) {
         textNodes = textNodes.concat(getTextNodesIn(node, opt_fnFilter));
       }
     }
@@ -43,6 +43,13 @@ function smarten(a) {
 
 function random_id() {
     return '_' + Math.random().toString(36).substr(2, 9);
+}
+
+
+function image_load(el) {
+    if (el.parentElement.classList.contains('header-image-preload')) {
+        el.parentElement.classList.remove('header-image-preload');
+    }
 }
 
 
@@ -154,12 +161,16 @@ class FineArt {
     build_html(art_object) {
         this.image_id = random_id();
 
-        return `<label for="art-${this.image_id}" class="margin-toggle">⌬</label><input type="checkbox" id="art-${this.image_id}" class="margin-toggle">
-<span class="marginnote">${art_object.artistDisplayName || art_object.culture}, <em>${art_object.title}</em>, ${art_object.objectDate || "Unknown Date"}.</span>
-          <img src="${art_object.primaryImageSmall}" alt="${encodeURIComponent(art_object.title)}, ${encodeURIComponent(art_object.artistDisplayName)}">`;
+        return `<label for="art-${this.image_id}" class="margin-toggle">⌬</label>
+<input type="checkbox" id="art-${this.image_id}" class="margin-toggle">
+<span class="marginnote">${art_object.artistDisplayName || art_object.culture}, 
+<em>${art_object.title}</em>, 
+${art_object.objectDate || "Unknown Date"}.
+</span>
+          <img src="${art_object.primaryImageSmall}" alt="${encodeURIComponent(art_object.title)}, ${encodeURIComponent(art_object.artistDisplayName)}" onload="image_load(this)">`;
     };
 
-    draw(el){
+    draw(){
         this.random_art.then(art_object=>{
             this.el.innerHTML = this.build_html(art_object);
         })
@@ -180,7 +191,7 @@ window.onload = function () {
     }
 };
 
-document.addEventListener("DOMContentLoaded", function(event) {
+document.addEventListener("DOMContentLoaded", function() {
     for (let el of document.getElementsByTagName('figure')){
         if (el.classList.contains('art-fill')){
             let art = new FineArt(el);
