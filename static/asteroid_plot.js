@@ -96,6 +96,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
             type: 'bubble',
             data: data,
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 tooltips: {
                     callbacks: {
                         label: function (tooltipItem, data) {

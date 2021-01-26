@@ -3,11 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/base_scripts.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/base_scripts.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/asteroid_plot.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/asteroid_plot.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/rpsk-styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/rpsk-styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/fine_art_explanation.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/fine_art_explanation.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/nasa_api_post.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/nasa_api_post.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/post_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/post_index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/incoming_asteroids_post.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/incoming_asteroids_post.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,7 +120,7 @@
       <workItem from="1609026555542" duration="1637000" />
       <workItem from="1610687298748" duration="4000" />
       <workItem from="1611192160439" duration="589000" />
-      <workItem from="1611193033776" duration="21656000" />
+      <workItem from="1611193033776" duration="23016000" />
     </task>
     <task id="LOCAL-00001" summary="Added procfile?">
       <created>1595184213534</created>
@@ -215,7 +213,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611552442219</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Added some sort-of-gross css and js to stop the page jumping around while the header image loads.">
+      <created>1611555036408</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1611555036408</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -247,7 +252,8 @@
     <MESSAGE value="Syntax highlighting!  How fun!" />
     <MESSAGE value="New post!  NEO plotting!" />
     <MESSAGE value="Made post links a bit more elegant" />
-    <option name="LAST_COMMIT_MESSAGE" value="Made post links a bit more elegant" />
+    <MESSAGE value="Added some sort-of-gross css and js to stop the page jumping around while the header image loads." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added some sort-of-gross css and js to stop the page jumping around while the header image loads." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api_website$app.coverage" NAME="app Coverage Results" MODIFIED="1611382439869" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
