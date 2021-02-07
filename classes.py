@@ -197,27 +197,75 @@ class Curator:
 
 
 class AsteroidAstronomer:
+    """A class that asynchronously delivers asteroid data from N
+    ASA's NEO (near earth object) api
+
+    Defaults to one week of data (which is the max the api allows).
+    It will always be up to date--the object will re-request data if
+    it notices that it has less than N days of data (where N is
+    1 + the `n_days_from_current` parameter).
+
+    Attributes
+    ----------
+    n_days: the number of after the current day that the object
+    will gather neo data
+    start_date: the start date for the api query, will always be
+    the current day
+    end_date: the end date for the query, will always be n_days
+    after the current day
+    raw_asteroid_data: ASYNC - the parsed list of asteroids
+    get_asteroid_data_for_plot: ASYNC - this depends on the
+    raw asteroid data, so it's also async.  It parses things
+    into the Chartjs format."""
+
     def __init__(self, n_days_from_current=6):
-        assert n_days_from_current <=6, f"The feed limit is 7 days total."
+        """
+        :param n_days_from_current: int The number of additional days
+        to grab asteroid data
+        """
+        assert n_days_from_current <= 6, f"The feed limit is 7 days total."
         self.n_days = n_days_from_current # can't be more than 6
         self._metadata = None
         self._asteroid_data = None
 
     @property
-    def start_date(self):
+    def start_date(self) -> datetime:
         return datetime.now()
 
     @property
-    def end_date(self):
+    def end_date(self) -> datetime:
         return datetime.now() + timedelta(days=self.n_days)
 
+    @property
+    async def raw_asteroid_data(self) -> list:
+        """ An enigmatic asynchrnous property!  Probably not actually
+        a good idea on my part, but hey, we're here now.  This will
+        only query the api if it's a new day, otherwise it'll use its
+        cached data.
+        :return: A list of asteroid dict
+        """
+
+        # First we check to see if we need data
+        if not self._metadata or self._metadata.get('error'):
+            self._metadata, self._asteroid_data = await self._build_asteroid_data()
+        else:
+            if self.start_date.strftime('%Y-%m-%d') in self._metadata and self.end_date.strftime('%Y-%m-%d') in self._metadata:
+                return self._asteroid_data
+            else:
+                self._metadata, self._asteroid_data = await self._build_asteroid_data()
+        return self._asteroid_data
+
     @staticmethod
-    def get_request_metadata(request_json: dict):
+    def _get_request_metadata(request_json: dict):
         day_neo_li_dict = request_json['near_earth_objects']
         return {day: len(neo_li) for day, neo_li in day_neo_li_dict.items()}
 
     @staticmethod
     def parse_asteroid_data(asteroid: dict):
+        """ Parses the nasa neo format into something a bit cleaner
+        :param asteroid: Data about a single neo from the api
+        :return: Curated data about the neo
+        """
         link = asteroid['nasa_jpl_url']
         name = asteroid['name']
         avg_width = (asteroid['estimated_diameter']['meters']['estimated_diameter_min']
@@ -235,6 +283,11 @@ class AsteroidAstronomer:
                     miss_distance_km=miss_distance_km)
 
     async def _query_neo_data(self) -> dict:
+        """ Asynchronously queries the nasa neo api
+        (it's got a doc site here:
+        https://api.nasa.gov/neo/?api_key=DEMO_KEY)
+        :return: An await-able request dict (NOT a request object)
+        """
         async with aiohttp.ClientSession() as session:
             req = await fetch(
                 session,
@@ -246,9 +299,14 @@ class AsteroidAstronomer:
         return req
 
     async def _build_asteroid_data(self) -> (dict, list):
+        """ Queries the api and builds metadata about the
+        number of asteroids looming over the horizon
+        :return: A metadata dict {date: n_rocks} and
+        a list of parsed asteroid dict
+        """
         try:
             request = await self._query_neo_data()
-            metadata = self.get_request_metadata(request)
+            metadata = self._get_request_metadata(request)
         except Exception as err:
             metadata = dict(error=True,
                             message=str(err))
@@ -260,19 +318,11 @@ class AsteroidAstronomer:
                                   for rock in day]))
         return metadata, asteroid_data
 
-    @property
-    async def raw_asteroid_data(self):
-        # First we check to see if we need data
-        if not self._metadata or self._metadata.get('error'):
-            self._metadata, self._asteroid_data = await self._build_asteroid_data()
-        else:
-            if self.start_date.strftime('%Y-%m-%d') in self._metadata and self.end_date.strftime('%Y-%m-%d') in self._metadata:
-                return self._asteroid_data
-            else:
-                self._metadata, self._asteroid_data = await self._build_asteroid_data()
-        return self._asteroid_data
-
     async def get_asteroid_data_for_plot(self) -> dict:
+        """ Parses asteroid data for Chartjs
+        :return: A dict with two datasets for hazardous and safe
+        asteroids
+        """
         datasets = {'potentially_hazardous': [],
                     'safe': []}
         for rock in await self.raw_asteroid_data:

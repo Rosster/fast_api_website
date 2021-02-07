@@ -53,8 +53,37 @@
             seem a bit superfluous.</span> and (b) I muddled through some more async python.
         </p>
         <p>
-            I'm going to write more about the process and the code later, but I've got to clean it up first,
-            and I wanted to post something because it's been forever.
+            <del>I'm going to write more about the process and the code later, but I've got to clean it up first,
+            and I wanted to post something because it's been forever.</del>  So, I cleaned up the python, learning
+            a smidge about better documentation in the process.  The repo lives
+            <a href="https://github.com/Rosster/fast_api_website">here</a>.  Have fun with it, I guess.
+            To be honest, I do not have the energy to go through a how to (I'm doing that for work at the moment,
+            and the process fills me with dread).  I'll summarize some more of my thoughts and feelings though.
+            <ol>
+                <li>
+                    The async python stuff is a <em>drag</em>, but it does make a difference.  I'm not using it in a
+                    particularly nuanced way here, but the pattern works.  You basically want the coroutines to bubble
+                    all the way up to the fastApi endpoints. When they do, you can actually see that it's running
+                    everything simultaneously.  It would be worth bookmarking that against Flask's threading behavior,
+                    though.
+                </li>
+                <li>
+                    I'm honestly struggling with the proper separation of the visualization and data layers.  It was a
+                    pain to reformat data to fit the ChartJS requirements (as is probably abundantly clear from this
+                    post), then again it wasn't <strong>hard</strong>, just annoying.  And you get all the delightful
+                    customizability that comes along with clientside development.  The contrast is a more python-only
+                    option<label for="python_only" class="margin-toggle sidenote-number"></label>
+                    <input type="checkbox" id="python_only" class="margin-toggle"><span class="sidenote">Those of us
+                    keeping track at home will recall that this whole charade began because I
+                    couldn't style the background color of a bokeh plot.</span>, which counts for a whole lot,
+                    especially if you don't care to bother with a hot mess of javascript.  Long story short, I really
+                    don't envy the balance that data visualization libraries have to walk in keeping things customizable
+                    while easy to use.  But I do love the idea of building a bunch of data endpoints, because it
+                    feels that lots of different clients in the future will be able to make use of them.  I'm not
+                    sure how to balance that against the cost of making something that will fill the immediate
+                    dashboard/publication requirements.
+                </li>
+            </ol>
         </p>
     </section>
 </article>

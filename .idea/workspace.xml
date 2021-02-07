@@ -3,8 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev Notebook.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Dev Notebook.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/asteroid_plot.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/asteroid_plot.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/rpsk-styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/rpsk-styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/fine_art_explanation.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/fine_art_explanation.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/incoming_asteroids_post.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/incoming_asteroids_post.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -120,7 +122,10 @@
       <workItem from="1609026555542" duration="1637000" />
       <workItem from="1610687298748" duration="4000" />
       <workItem from="1611192160439" duration="589000" />
-      <workItem from="1611193033776" duration="23016000" />
+      <workItem from="1611193033776" duration="26317000" />
+      <workItem from="1611799455504" duration="322000" />
+      <workItem from="1611799831876" duration="593000" />
+      <workItem from="1612736731325" duration="2023000" />
     </task>
     <task id="LOCAL-00001" summary="Added procfile?">
       <created>1595184213534</created>
@@ -220,7 +225,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611555036408</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Added some simple css for plot sizing on phones">
+      <created>1611627045478</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1611627045478</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -253,9 +265,10 @@
     <MESSAGE value="New post!  NEO plotting!" />
     <MESSAGE value="Made post links a bit more elegant" />
     <MESSAGE value="Added some sort-of-gross css and js to stop the page jumping around while the header image loads." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added some sort-of-gross css and js to stop the page jumping around while the header image loads." />
+    <MESSAGE value="Added some simple css for plot sizing on phones" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added some simple css for plot sizing on phones" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/fast_api_website$app.coverage" NAME="app Coverage Results" MODIFIED="1611382439869" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/fast_api_website$app.coverage" NAME="app Coverage Results" MODIFIED="1612737139567" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

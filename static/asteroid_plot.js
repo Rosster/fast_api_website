@@ -2,7 +2,7 @@ const moon_orbit = 384400;
 const charts = {}
 
 function hexToRgb(hex) {
-    // Pilfered from: https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+  // Pilfered from: https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
   // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
   let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
   hex = hex.replace(shorthandRegex, function(m, r, g, b) {
