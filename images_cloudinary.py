@@ -1,5 +1,6 @@
 import os
 from time import time
+import re
 
 import cloudinary
 from cloudinary.search import Search
@@ -42,5 +43,6 @@ class SunsetGIFs:
 
     @property
     def most_recent_url(self) -> str:
-        return self.most_recent_image.get('secure_url')
+        recent_image = self.most_recent_image.get('secure_url', '')
+        return re.sub(r"(?<=upload/).*?(?=/sunset_gifs)", 'f_auto,fl_lossy/q_30', recent_image)
 
