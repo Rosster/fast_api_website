@@ -6,7 +6,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 
 import classes
-import images_cloudinary
+# import images_cloudinary
 
 app = FastAPI()
 
@@ -16,7 +16,7 @@ templates = Jinja2Templates(directory='templates')
 content_organizer = classes.ContentOrganizer()
 art_curator = classes.Curator()
 asteroids = classes.AsteroidAstronomer(n_days_from_current=6) # One week
-sunset_images = images_cloudinary.SunsetGIFs()
+# sunset_images = images_cloudinary.SunsetGIFs()
 
 
 @app.get('/')
@@ -62,10 +62,10 @@ async def random_art(art_type: Optional[str] = Query(None,
 async def asteroid_plot_data():
     return await asteroids.get_asteroid_data_for_plot()
 
-
-@app.get('/recent_sunset_gif', response_class=RedirectResponse)
-async def recent_sunset_gif():
-    return RedirectResponse(sunset_images.most_recent_url)
+#
+# @app.get('/recent_sunset_gif', response_class=RedirectResponse)
+# async def recent_sunset_gif():
+#     return RedirectResponse(sunset_images.most_recent_url)
 
 
 # Instructions came from here: https://www.tutlinks.com/create-and-deploy-fastapi-app-to-heroku/
