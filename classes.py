@@ -34,6 +34,7 @@ class Content:
                  template_file: str,
                  template_folder='templates',
                  preview_tag="preview",
+                 preview_macro="preview_section",
                  title_tag="h1"):
         self.abs_template_path = f"{os.getcwd()}{os.sep}{template_folder}{os.sep}{template_file}"
         self.template_file = template_file
@@ -49,7 +50,14 @@ class Content:
                            self.raw_html.index(f'<{preview_tag}>')+len(f'<{preview_tag}>'):
                            self.raw_html.rindex(f'</{preview_tag}>')]
         else:
-            self.preview = None
+            search_str = r"call " + preview_macro + ".*?%}(.*?){%"
+            exp = re.search(search_str, self.raw_html, flags=re.DOTALL)
+            if exp:
+                preview = exp.groups()[0].strip()
+                # We have to add the tags here
+                self.preview = f"<section><p>{preview}</p></section>"
+            else:
+                self.preview = None
 
         if f'<{title_tag}>' in self.raw_html and f'</{title_tag}>' in self.raw_html:
             self.title = self.raw_html[
@@ -338,13 +346,13 @@ class AsteroidAstronomer:
                                                               speed=rock['velocity_km_s'])
                                                          )
             else:
-                datasets['safe'].append(dict(x=rock['approach_date'].timestamp(),
-                                             y=rock['miss_distance_km'],
-                                             width=rock['width_m'],
-                                             name=rock['name'].strip('()') if (rock['name'][0] == rock['name'][-1]) and
-                                                                             rock['name'][0] in '()' else rock['name'],
-                                             speed=rock['velocity_km_s'])
-                                        )
+                datasets['safe'].append(
+                    dict(x=rock['approach_date'].timestamp(),
+                         y=rock['miss_distance_km'],
+                         width=rock['width_m'],
+                         name=rock['name'].strip('()') if (rock['name'][0] == rock['name'][-1]) and
+                         rock['name'][0] in '()' else rock['name'],
+                         speed=rock['velocity_km_s']))
 
         # This is needed for charts.js
         return dict(datasets=[dict(label=k,

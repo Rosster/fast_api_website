@@ -2,12 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/images_cloudinary.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/sunset_gifs.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dev Notebook.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Dev Notebook.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/asteroid_plot.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/asteroid_plot.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/fine_art_explanation.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/fine_art_explanation.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/incoming_asteroids_post.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/incoming_asteroids_post.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base_document.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base_document.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,9 +20,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="JavaScript File" />
         <option value="HTML File" />
         <option value="Python Script" />
-        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -31,6 +34,14 @@
       </list>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="JupyterTrust" id="a498b48f-b62e-45aa-8230-63ad7d05575c" />
   <component name="ProjectId" id="1etLUDCHsvfCTRuNwr3TeqOBRSU" />
@@ -52,7 +63,7 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.templateLanguages.PyTemplateLanguageModulesConfigurable" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.build" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -126,6 +137,9 @@
       <workItem from="1611799455504" duration="322000" />
       <workItem from="1611799831876" duration="593000" />
       <workItem from="1612736731325" duration="2023000" />
+      <workItem from="1616357175797" duration="2472000" />
+      <workItem from="1616361774062" duration="1350000" />
+      <workItem from="1619985148032" duration="10330000" />
     </task>
     <task id="LOCAL-00001" summary="Added procfile?">
       <created>1595184213534</created>
@@ -269,6 +283,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="Added some simple css for plot sizing on phones" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/fast_api_website$app.coverage" NAME="app Coverage Results" MODIFIED="1612737139567" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/fast_api_website$app.coverage" NAME="app Coverage Results" MODIFIED="1620501754706" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

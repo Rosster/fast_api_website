@@ -17,13 +17,41 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
+{#Macro Section#}
+{%- macro preview_section() %}
+<preview>
+    <section>
+            <p>
+                {{ caller() }}
+            </p>
+    </section>
+</preview>
+{%- endmacro -%}
+
+{%- macro numbered_sidenote(label) -%}
+<label for="{{ label }}" class="margin-toggle sidenote-number"></label>
+<input type="checkbox" id="{{ label }}" class="margin-toggle">
+    <span class="sidenote">
+{{ caller() }}
+    </span>
+{%- endmacro -%}
+
+{%- macro marginnote(label) -%}
+<label for="{{ label }}" class="margin-toggle">⌬</label>
+<input type="checkbox" id="{{ label }}" class="margin-toggle">
+<span class="marginnote">
+{{ caller() }}
+</span>
+{%- endmacro -%}
+
+{#End of Macro Section#}
 <body>
     <section>
-        <p class="subtitle"><a href="/" class="no-tufte-underline">Ross P. Sullivan Kelly</a><label for="mn-who-am-i" class="margin-toggle"> ⌬</label>
-          <input type="checkbox" id="mn-who-am-i" class="margin-toggle">
-          <span class="marginnote">
+        <p class="subtitle"><a href="/" class="no-tufte-underline">Ross P. Sullivan Kelly</a>
+            {% call marginnote("mn-who-am-i") %}
             I'm a data scientist, I was a chemist for a while before that.  I love (and do most of my work in) python.  My pronouns are he/him.
-          </span></p>
+            {% endcall %}
+        </p>
     </section>
     {% block content %}
 
@@ -31,3 +59,4 @@
 </body>
 
 </html>
+

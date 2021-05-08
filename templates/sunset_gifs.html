@@ -1,0 +1,19 @@
+{% extends "base_document.html" %}
+{% block title %}Sunset GIFs{% endblock %}
+{% block content %}
+<meta name="type" content="blog_post">
+<meta name="keywords" content="raspberrypi pictures python linux">
+<meta name="timestamp" content="202105021256">
+<article class="no-top-padding">
+    <h1>Timeslapse GIFs</h1>
+    <section><figure><img src="/recent_sunset_gif" alt="Sunset from last night."></figure></section>
+    {%- call preview_section() -%}
+        I wanted to make gifs of the view outside my window and managed to make it really complicated.
+    {% endcall %}
+    <section>
+        <p>
+            More to come, but I just wanted to get the party started.
+        </p>
+    </section>
+</article>
+{% endblock %}
