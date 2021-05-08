@@ -44,5 +44,5 @@ class SunsetGIFs:
     @property
     def most_recent_url(self) -> str:
         recent_image = self.most_recent_image.get('secure_url', '')
-        return re.sub(r"(?<=upload/).*?(?=/sunset_gifs)", 'f_auto,fl_lossy/q_30', recent_image)
+        return re.sub(r"(?<=upload/).*?(?=/sunset_gifs)", 'f_auto,fl_lossy/q_60', recent_image)
 
