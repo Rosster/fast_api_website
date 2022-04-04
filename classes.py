@@ -1,5 +1,5 @@
 import asyncio
-import aiohttp
+import httpx
 import concurrent.futures
 from datetime import datetime, timedelta
 import json
@@ -23,10 +23,14 @@ def custom_strftime(datetime_format, t):
     return t.strftime(datetime_format).replace('{S}', str(t.day) + suffix(t.day))
 
 
-async def fetch(session: aiohttp.client.ClientSession, url: str, **kwargs) -> dict:
+async def fetch(url: str, client: Optional[httpx.AsyncClient] = None, **kwargs) -> dict:
     """From here: https://stackoverflow.com/questions/22190403/how-could-i-use-requests-in-asyncio/50312981#50312981"""
-    async with session.get(url, **kwargs) as response:
-        return await response.json()
+    if client:
+        response = await client.get(url, **kwargs)
+    else:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url, **kwargs)
+    return response.json()
 
 
 class Content:
@@ -137,12 +141,9 @@ class ArtApi:
     @property
     async def matching_objects(self) -> List[int]:
         if f"_{self.art_type}" not in self.cache:
-            async with aiohttp.ClientSession() as session:
-                req = await fetch(
-                    session,
-                    f"https://collectionapi.metmuseum.org/public/collection/v1/search?q={quote_plus(self.art_type)}"
-                )
-
+            req = await fetch(
+                f"https://collectionapi.metmuseum.org/public/collection/v1/search?q={quote_plus(self.art_type)}"
+            )
             if req.get('message') == 'Not Found':
                 print('Reverting to default, landscapes!')
                 default_art = json.load(open(self.default_object_path, 'rt'))
@@ -166,11 +167,9 @@ class ArtApi:
             raise KeyError(f"{object_id} not in art objects!")
 
         if object_id not in self.cache:
-            async with aiohttp.ClientSession() as session:
-                art_req = await fetch(
-                    session,
-                    f"https://collectionapi.metmuseum.org/public/collection/v1/objects/{object_id}"
-                )
+            art_req = await fetch(
+                f"https://collectionapi.metmuseum.org/public/collection/v1/objects/{object_id}"
+            )
             if art_req.get('message') == 'Not Found':
                 raise KeyError(f"{object_id} not found via api!")
             else:
@@ -296,14 +295,12 @@ class AsteroidAstronomer:
         https://api.nasa.gov/neo/?api_key=DEMO_KEY)
         :return: An await-able request dict (NOT a request object)
         """
-        async with aiohttp.ClientSession() as session:
-            req = await fetch(
-                session,
-                f"https://api.nasa.gov/neo/rest/v1/feed",
-                params={'api_key': os.environ['NASA_API_KEY'],
-                        'start_date': self.start_date.strftime("%Y-%m-%d"),
-                        'end_date': self.end_date.strftime("%Y-%m-%d")}
-            )
+        req = await fetch(
+            f"https://api.nasa.gov/neo/rest/v1/feed",
+            params={'api_key': os.environ['NASA_API_KEY'],
+                    'start_date': self.start_date.strftime("%Y-%m-%d"),
+                    'end_date': self.end_date.strftime("%Y-%m-%d")}
+        )
         return req
 
     async def _build_asteroid_data(self) -> (dict, list):
