@@ -160,7 +160,6 @@ class FineArt {
 
     build_html(art_object) {
         this.image_id = random_id();
-
         return `<label for="art-${this.image_id}" class="margin-toggle">⌬</label>
 <input type="checkbox" id="art-${this.image_id}" class="margin-toggle">
 <span class="marginnote">${art_object.artistDisplayName || art_object.culture}, 

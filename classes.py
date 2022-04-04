@@ -142,7 +142,7 @@ class ArtApi:
     async def matching_objects(self) -> List[int]:
         if f"_{self.art_type}" not in self.cache:
             req = await fetch(
-                f"https://collectionapi.metmuseum.org/public/collection/v1/search?q={quote_plus(self.art_type)}"
+                f"https://collectionapi.metmuseum.org/public/collection/v1/search?q={quote_plus(self.art_type)}&hasImages=true"
             )
             if req.get('message') == 'Not Found':
                 print('Reverting to default, landscapes!')
