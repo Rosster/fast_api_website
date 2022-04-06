@@ -1,0 +1,7 @@
+<label for="art-{{ objectID }}" class="margin-toggle">⌬</label>
+<input type="checkbox" id="art-{{ objectID }}" class="margin-toggle">
+<span class="marginnote">{{ artistDisplayName or culture  }},
+<em>{{ title }}</em>,
+{{ objectDate or "Unknown Date"}}.
+</span>
+<img src="{{ primaryImageSmall }}" alt="{{ title_quote_plus }}, {{ artist_quote_plus or culture }}" onload="image_load(this)">

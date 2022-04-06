@@ -1,0 +1,34 @@
+{% extends "base_document.html" %}
+{% block title %}Let's Give HTMX a Try{% endblock %}
+{% block additional_scripts %}
+<script src="https://unpkg.com/htmx.org@1.7.0"></script>
+{% endblock %}
+{% block content %}
+<meta name="type" content="blog_post">
+<meta name="keywords" content="python310 htmx html js">
+<meta name="timestamp" content="202204041636">
+<article class="no-top-padding">
+    <h1>HTMX Seems Cool!</h1>
+    <preview>
+        <section>
+                <p>
+                    I saw a post about <a href="https://htmx.org/">htmx</a> and wanted to give it a whirl! It's basically an amped up markdown language, hence the radical <em>X</em> as opposed to the milk-toast <em>L</em>. I also talk about upgrading python, because sometimes you have to fix something that ain't broke <em>just to feel.</em>
+                </p>
+        </section>
+    </preview>
+    <section>
+        <p>
+            <span class="newthought">Howdy folks!</span> It's been a minute, which means that it's time to recklessly update python and also all the libraries I use for this infrequently-updated publication! I also want to check out the <a href="https://htmx.org/">htmx</a> library (toolset? module? framework? What do I even call these js accessories?). Will I get to that before I get distracted? It all depends on how this update process goes!
+        </p>
+        <p>
+            Python 3.10.4 is the most recent option as of publication (lol probably not, I'm writing this on 3-30-22, but I doubt I'll finish before the next update, not exactly a model of clockwork updates over here at sullivankelly dot com), and I'm excited to check out <code>match</code> statements (although I totally do not understand exactly how they work).{% call marginnote("mn-how-did-it-go") %}Turns out it was actually pretty easy to update, I thought there'd be more fire and fury, but the only hiccup was the <code>aiohttp</code> module misbehaving as of the most recent version, so I switched to <code>httpx</code>{% endcall %}
+        </p>
+        <p>
+            So, I'm going to refactor some of my image api tooling to just operate with htmx. The cool thing here is that I won't need any javascript to do the fetching and html building and all that. I <em>think</em> that all I need to do is just use the html to replace the container element on load with the <em>beautiful</em> art.{% call marginnote("mn-kindof-cool") %}So, I'm basically moving some html rendering to the server. Currently, it's rendered on the client. I think, in principle, this is a nice performance improvement if I do clever cache-ing, and it seems less messy, tbh. Also, I can use jinja for the templates, and who doesn't love that!{% endcall %} Super simple! Right? Right!
+        </p>
+    <figure class="test-art">
+        <div hx-get="/random_art_html" hx-trigger="load" hx-swap="outerHTML"><em>This is a test!</em></div>
+    </figure>
+    </section>
+</article>
+{% endblock %}

@@ -1,4 +1,5 @@
 from typing import Optional
+from urllib.parse import quote
 
 from fastapi import FastAPI, Request, Query
 from fastapi.staticfiles import StaticFiles
@@ -55,7 +56,28 @@ async def random_art(art_type: Optional[str] = Query(None,
     if not art_type:
         art_type = 'landscape'
 
-    return await art_curator.get_sample(art_type)
+    results = await art_curator.get_sample(art_type)
+    for attempt_no in range(10):
+        if not results['primaryImageSmall']:
+            results = await art_curator.get_sample(art_type)
+        else:
+            break
+
+    results['title_quote_plus'] = quote(results['title'])
+    results['artist_quote_plus'] = quote(results['artistDisplayName'])
+
+    return results
+
+
+@app.get('/random_art_html')
+async def random_art_html(request: Request, art_type: Optional[str] = Query(None,
+                                                                            max_length=200,
+                                                                            regex=f"^[a-z]+$")):
+    art_obj = await random_art(art_type=art_type)
+
+    return templates.TemplateResponse("art.jinja.html",
+                                      {'request': request,
+                                       **art_obj})
 
 
 @app.get('/asteroid_plot_data')

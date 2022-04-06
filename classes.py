@@ -142,7 +142,7 @@ class ArtApi:
     async def matching_objects(self) -> List[int]:
         if f"_{self.art_type}" not in self.cache:
             req = await fetch(
-                f"https://collectionapi.metmuseum.org/public/collection/v1/search?q={quote_plus(self.art_type)}&hasImages=true"
+                f"https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&q={quote_plus(self.art_type)}"
             )
             if req.get('message') == 'Not Found':
                 print('Reverting to default, landscapes!')
@@ -182,7 +182,8 @@ class ArtApi:
 
     @property
     async def random_object(self):
-        if time() < self.last_accessed + 10 and self.last_object:
+        # a bit of a hack here to drop art that lack images
+        if time() < self.last_accessed + 10 and self.last_object and self.last_object['primaryImageSmall']:
             return self.last_object
 
         matches = await self.matching_objects
