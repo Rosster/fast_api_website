@@ -21,14 +21,40 @@
             <span class="newthought">Howdy folks!</span> It's been a minute, which means that it's time to recklessly update python and also all the libraries I use for this infrequently-updated publication! I also want to check out the <a href="https://htmx.org/">htmx</a> library (toolset? module? framework? What do I even call these js accessories?). Will I get to that before I get distracted? It all depends on how this update process goes!
         </p>
         <p>
-            Python 3.10.4 is the most recent option as of publication (lol probably not, I'm writing this on 3-30-22, but I doubt I'll finish before the next update, not exactly a model of clockwork updates over here at sullivankelly dot com), and I'm excited to check out <code>match</code> statements (although I totally do not understand exactly how they work).{% call marginnote("mn-how-did-it-go") %}Turns out it was actually pretty easy to update, I thought there'd be more fire and fury, but the only hiccup was the <code>aiohttp</code> module misbehaving as of the most recent version, so I switched to <code>httpx</code>{% endcall %}
+            Python 3.10.4 is the most recent option as of publication (lol probably not, I'm writing this on 3-30-22, but I doubt I'll finish before the next update, not exactly a model of clockwork updates over here at sullivankelly dot com), and I'm excited to check out <code>match</code> statements (although I totally do not understand exactly how they work).
         </p>
+        <p>It was actually pretty simple. I got really hyped for disaster, and none came!{% call marginnote("mn-how-did-it-go") %}Turns out it was actually pretty easy to update, I thought there'd be more fire and fury, but the only hiccup was the <code>aiohttp</code> module misbehaving as of the most recent version, so I switched to <code>httpx</code>{% endcall %} Ah well...</p>
         <p>
             So, I'm going to refactor some of my image api tooling to just operate with htmx. The cool thing here is that I won't need any javascript to do the fetching and html building and all that. I <em>think</em> that all I need to do is just use the html to replace the container element on load with the <em>beautiful</em> art.{% call marginnote("mn-kindof-cool") %}So, I'm basically moving some html rendering to the server. Currently, it's rendered on the client. I think, in principle, this is a nice performance improvement if I do clever cache-ing, and it seems less messy, tbh. Also, I can use jinja for the templates, and who doesn't love that!{% endcall %} Super simple! Right? Right!
         </p>
     <figure class="test-art">
         <div hx-get="/random_art_html" hx-trigger="load" hx-swap="outerHTML"><em>This is a test!</em></div>
     </figure>
+    <p>I'm crushing it. It <em>was</em> really simple. Major props to the htmx folks. Basically, I modified one of the endpoints to look like this:</p>
+            <pre>
+            <code class="python">
+@app.get('/random_art_html')
+async def random_art_html(request: Request, art_type: Optional[str] = Query(None,
+                                                                            max_length=200,
+                                                                            regex=f"^[a-z]+$")):
+    art_obj = await random_art(art_type=art_type)
+
+    return templates.TemplateResponse("art.jinja.html",
+                                      {'request': request,
+                                       **art_obj})
+            </code>
+            </pre>
+    <p>
+        And then just threw the htmx script in up on this page, and then added this to the post:
+    </p>
+    <pre>
+        <code class="html">
+&lt;figure class=&quot;test-art&quot;&gt;<br>&lt;div hx-get=&quot;/random_art_html&quot; hx-trigger=&quot;load&quot; hx-swap=&quot;outerHTML&quot;&gt;<br>&lt;em&gt;This is a test!&lt;/em&gt;<br>&lt;/div&gt;<br>&lt;/figure&gt;
+        </code>
+    </pre>
+    <p>
+        That's it! Dang! Basically, the <code>hx-trigger='load'</code> means that it fires on load (as opposed to click, or keyup, or somesuch. Then, the <code>hx-get='/random_art_html'</code> says to use a GET request to the "random_art_html" endpoint, and then the <code>hx-swap='outerHTML'</code> means that it replaces--rather, <em>swaps</em>--the html of the enclosing div with whatever the output of the endpoint happens to be! Cool!
+    </p>
     </section>
 </article>
 {% endblock %}
