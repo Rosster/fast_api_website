@@ -9,6 +9,7 @@ import re
 from time import time
 from typing import List, Optional, Dict
 from urllib.parse import quote_plus, quote
+from email import utils
 
 from expiringdict import ExpiringDict
 
@@ -85,6 +86,13 @@ class Content:
     def formatted_date(self) -> str:
         if self.metadata.get('timestamp'):
             return custom_strftime('%B {S}, %Y', datetime.strptime(self.metadata.get('timestamp'), '%Y%m%d%H%M'))
+        else:
+            return ''
+
+    @property
+    def rfc_822_date(self) -> str:
+        if self.metadata.get('timestamp'):
+            return utils.format_datetime(datetime.strptime(self.metadata.get('timestamp'), '%Y%m%d%H%M'))
         else:
             return ''
 

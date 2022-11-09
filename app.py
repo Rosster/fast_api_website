@@ -90,6 +90,16 @@ async def recent_sunset_gif():
     return RedirectResponse(sunset_images.most_recent_url)
 
 
+@app.get('/rss')
+async def rss(request: Request):
+
+    return templates.TemplateResponse("rss.xml",
+                                      {'request': request,
+                                       'posts': list(content_organizer.posts),
+                                       'site': dict(name='SullivanKelly dot com',
+                                                    description='My blog',
+                                                    url='www.sullivankelly.com')})
+
 # Instructions came from here: https://www.tutlinks.com/create-and-deploy-fastapi-app-to-heroku/
 # Here: https://www.uvicorn.org/deployment/
 # And here https://edwardtufte.github.io/tufte-css/
