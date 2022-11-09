@@ -53,7 +53,7 @@ async def random_art_html(request: Request, art_type: Optional[str] = Query(None
         </code>
     </pre>
     <p>
-        That's it! Dang! Basically, the <code>hx-trigger='load'</code> means that it fires on load (as opposed to click, or keyup, or somesuch. Then, the <code>hx-get='/random_art_html'</code> says to use a GET request to the "random_art_html" endpoint, and then the <code>hx-swap='outerHTML'</code> means that it replaces--rather, <em>swaps</em>--the html of the enclosing div with whatever the output of the endpoint happens to be! Cool!
+        That's it! Hot Dang! Basically, the <code>hx-trigger='load'</code> means that it fires on load (as opposed to click, or keyup, or somesuch. Then, the <code>hx-get='/random_art_html'</code> says to use a GET request to the "random_art_html" endpoint, and then the <code>hx-swap='outerHTML'</code> means that it replaces--rather, <em>swaps</em>--the html of the enclosing div with whatever the output of the endpoint happens to be! Cool!
     </p>
     </section>
 </article>
