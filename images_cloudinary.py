@@ -21,7 +21,7 @@ class SunsetGIFs:
     def _execute_search(self) -> dict:
         return Search()\
               .expression(f'resource_type:image AND folder={self._folder}')\
-              .sort_by('public_id','desc')\
+              .sort_by('public_id', 'desc')\
               .max_results('30')\
               .execute()
 
