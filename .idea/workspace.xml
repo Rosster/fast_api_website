@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="Just a push with basically nothing in it to upgrade the heroku stack">
-      <change afterPath="$PROJECT_DIR$/templates/rss.xml" afterDir="false" />
+    <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="Testing rss in production!">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/rss.xml" beforeDir="false" afterPath="$PROJECT_DIR$/templates/rss.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,7 +161,7 @@
       <workItem from="1648700752865" duration="57151000" />
       <workItem from="1649217394653" duration="5959000" />
       <workItem from="1667969952604" duration="1063000" />
-      <workItem from="1667971183024" duration="3007000" />
+      <workItem from="1667971183024" duration="3636000" />
     </task>
     <task id="LOCAL-00001" summary="Added procfile?">
       <created>1595184213534</created>
@@ -423,7 +422,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667972455547</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="Testing rss in production!">
+      <created>1667974488914</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1667974488914</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -444,7 +450,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="New post!  NEO plotting!" />
     <MESSAGE value="Made post links a bit more elegant" />
     <MESSAGE value="Added some sort-of-gross css and js to stop the page jumping around while the header image loads." />
     <MESSAGE value="Added some simple css for plot sizing on phones" />
@@ -469,7 +474,8 @@
     <MESSAGE value="Ok this takes a while" />
     <MESSAGE value="Rfc what even is that" />
     <MESSAGE value="Just a push with basically nothing in it to upgrade the heroku stack" />
-    <option name="LAST_COMMIT_MESSAGE" value="Just a push with basically nothing in it to upgrade the heroku stack" />
+    <MESSAGE value="Testing rss in production!" />
+    <option name="LAST_COMMIT_MESSAGE" value="Testing rss in production!" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api_website$app.coverage" NAME="app Coverage Results" MODIFIED="1667971247166" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
