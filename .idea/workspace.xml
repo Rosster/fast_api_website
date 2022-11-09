@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="Validator is failing, mostly because of escaping">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/rss.xml" beforeDir="false" afterPath="$PROJECT_DIR$/templates/rss.xml" afterDir="false" />
+    <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="I think the exclamation point is being sassy">
+      <change beforePath="$PROJECT_DIR$/templates/trying_htmx.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/trying_htmx.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,7 +159,7 @@
       <workItem from="1648700752865" duration="57151000" />
       <workItem from="1649217394653" duration="5959000" />
       <workItem from="1667969952604" duration="1063000" />
-      <workItem from="1667971183024" duration="4784000" />
+      <workItem from="1667971183024" duration="5172000" />
     </task>
     <task id="LOCAL-00001" summary="Added procfile?">
       <created>1595184213534</created>
@@ -436,7 +434,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667974956567</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="I think the exclamation point is being sassy">
+      <created>1667976951133</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1667976951133</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -457,7 +462,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added some sort-of-gross css and js to stop the page jumping around while the header image loads." />
     <MESSAGE value="Added some simple css for plot sizing on phones" />
     <MESSAGE value="Sunset gifs are coming!  The beginnings of the post and the backend api." />
     <MESSAGE value="SOmething broke..." />
@@ -482,7 +486,8 @@
     <MESSAGE value="Just a push with basically nothing in it to upgrade the heroku stack" />
     <MESSAGE value="Testing rss in production!" />
     <MESSAGE value="Validator is failing, mostly because of escaping" />
-    <option name="LAST_COMMIT_MESSAGE" value="Validator is failing, mostly because of escaping" />
+    <MESSAGE value="I think the exclamation point is being sassy" />
+    <option name="LAST_COMMIT_MESSAGE" value="I think the exclamation point is being sassy" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api_website$app.coverage" NAME="app Coverage Results" MODIFIED="1667971247166" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
