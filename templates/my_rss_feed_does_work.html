@@ -1,0 +1,18 @@
+{% extends "base_document.html" %}
+{% block title %}Does My RSS Feed Work? Yes!{% endblock %}
+{% block content %}
+<meta name="type" content="blog_post">
+<meta name="keywords" content="rss atom feed">
+<meta name="timestamp" content="202211091748">
+<article class="no-top-padding">
+    <h1>RSS Feed v2</h1>
+    {%- call preview_section() -%}
+        Heck yeah it works! Boo ya!
+    {% endcall %}
+    <section>
+        <p>
+            More to come, but it looks like we're cooking over in RSS feed land!
+        </p>
+    </section>
+</article>
+{% endblock %}
