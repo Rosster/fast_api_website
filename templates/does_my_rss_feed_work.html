@@ -1,0 +1,18 @@
+{% extends "base_document.html" %}
+{% block title %}Does My RSS Feed Work? 1 of N.{% endblock %}
+{% block content %}
+<meta name="type" content="blog_post">
+<meta name="keywords" content="rss atom feed">
+<meta name="timestamp" content="202211091748">
+<article class="no-top-padding">
+    <h1>RSS Feed</h1>
+    {%- call preview_section() -%}
+        Is making an RSS feed as simple as the name suggests?
+    {% endcall %}
+    <section>
+        <p>
+            I'm basically just testing to see whether the rss feed I built works...In unrelated news it appears that questions marks aren't allowed in my URLs. Ah, a bug for another day.
+        </p>
+    </section>
+</article>
+{% endblock %}

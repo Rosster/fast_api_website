@@ -10,8 +10,8 @@
      <title>{{ post.title|escape }}</title>
      <description>{{ post.preview|escape }}</description>
      <pubDate>{{ post.rfc_822_date }}</pubDate>
-     <link>{{ site.url }}/posts/{{post.title.lower()|escape}} </link>
-     <guid isPermaLink="true">{{ site.url }}/posts/{{ post.title.lower()|e }} </guid>
+     <link>{{ site.url }}/posts/{{post.title.lower()|escape}}</link>
+     <guid isPermaLink="true">{{ site.url }}/posts/{{ post.title.lower()|escape }}</guid>
    </item>
   {% endfor %}
  </channel>
