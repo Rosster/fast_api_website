@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="Still sassy...">
-      <change afterPath="$PROJECT_DIR$/templates/does_my_rss_feed_work.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/rss.xml" beforeDir="false" afterPath="$PROJECT_DIR$/templates/rss.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/trying_htmx.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/trying_htmx.html" afterDir="false" />
+    <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="Test RSS feed post! So exciting!">
+      <change beforePath="$PROJECT_DIR$/templates/does_my_rss_feed_work.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/does_my_rss_feed_work.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,7 +159,7 @@
       <workItem from="1648700752865" duration="57151000" />
       <workItem from="1649217394653" duration="5959000" />
       <workItem from="1667969952604" duration="1063000" />
-      <workItem from="1667971183024" duration="7051000" />
+      <workItem from="1667971183024" duration="7870000" />
     </task>
     <task id="LOCAL-00001" summary="Added procfile?">
       <created>1595184213534</created>
@@ -451,7 +448,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667979348381</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="Test RSS feed post! So exciting!">
+      <created>1668045188194</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1668045188194</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -472,7 +476,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Sunset gifs are coming!  The beginnings of the post and the backend api." />
     <MESSAGE value="SOmething broke..." />
     <MESSAGE value="Updated python?" />
     <MESSAGE value="GROSS REQUIREMENTS CHANGE" />
@@ -497,7 +500,8 @@
     <MESSAGE value="Validator is failing, mostly because of escaping" />
     <MESSAGE value="I think the exclamation point is being sassy" />
     <MESSAGE value="Still sassy..." />
-    <option name="LAST_COMMIT_MESSAGE" value="Still sassy..." />
+    <MESSAGE value="Test RSS feed post! So exciting!" />
+    <option name="LAST_COMMIT_MESSAGE" value="Test RSS feed post! So exciting!" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api_website$app.coverage" NAME="app Coverage Results" MODIFIED="1667971247166" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
