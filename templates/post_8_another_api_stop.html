@@ -1,0 +1,17 @@
+{% extends "base_document.html" %}
+{% block title %}Does My RSS Feed Work? 1 of N.{% endblock %}
+{% block content %}
+<meta name="type" content="draft_blog_post">
+<meta name="keywords" content="rss atom feed">
+<meta name="timestamp" content="202303032217">
+<article class="no-top-padding">
+    <h1>Solar Flares</h1>
+    {%- call preview_section() -%}
+        Y'all I've got another api to play with! This time it's space weather! Also, is it <em>bad</em> that I end up updating python every time I post? Is it worse that I post so infrequently that there's a new version of python every time? <em>Tune in for the answers!</em>
+    {% endcall %}
+    <section>
+        <p>
+        </p>
+    </section>
+</article>
+{% endblock %}
