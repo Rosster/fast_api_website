@@ -4,4 +4,4 @@
 <em>{{ title }}</em>,
 {{ objectDate or "Unknown Date"}}.
 </span>
-<img src="{{ primaryImageSmall }}" alt="{{ title_quote_plus }}, {{ artist_quote_plus or culture }}" onload="image_load(this)">
+<img src="{{ primaryImageSmall }}" alt="{{ title_quote_plus }}, {{ artist_quote_plus or culture }}" onload="image_load(this)" onclick="document.getElementById('art-{{ objectID }}').click()">

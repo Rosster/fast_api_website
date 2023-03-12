@@ -4,8 +4,10 @@
 <meta name="type" content="index">
 <meta name="timestamp" content="202007222136">
 <article>
-    <figure class="art-fill api-image header-image-preload" title="This is a random piece of landscape art from the Met's collection.  Implementation details described in post: The Met Art API"></figure>
-
+{#    <figure class="art-fill api-image header-image-preload" title="This is a random piece of landscape art from the Met's collection.  Implementation details described in post: The Met Art API"></figure>#}
+    <figure class="header-art" title="This is a random piece of landscape art from the Met's collection. Implementation details described in post: The Met Art API">
+        <div hx-get="/random_art_html?art_type=landscape" hx-trigger="load" hx-swap="outerHTML"><em>Loading...</em></div>
+    </figure>
     {% for post in posts %}
     <hr>
         {% if post.formatted_date and post.title %}

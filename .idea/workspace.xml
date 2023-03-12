@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="Upgrading to python 3.11 because why the hell not. Ooops missed my requirements file">
-      <change afterPath="$PROJECT_DIR$/templates/post_8_another_api_stop.html" afterDir="false" />
+    <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="New draft, and a wee test!">
+      <change beforePath="$PROJECT_DIR$/.idea/FastAPI_Static.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/FastAPI_Static.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/does_my_rss_feed_work.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/does_my_rss_feed_work.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/art.jinja.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/art.jinja.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base_document.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base_document.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/post_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/post_index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/trying_htmx.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/trying_htmx.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,7 +173,7 @@
       <workItem from="1677907596187" duration="43000" />
       <workItem from="1677907666763" duration="1253000" />
       <workItem from="1677909152342" duration="359000" />
-      <workItem from="1677909519028" duration="1669000" />
+      <workItem from="1677909519028" duration="6263000" />
     </task>
     <task id="LOCAL-00001" summary="Added procfile?">
       <created>1595184213534</created>
@@ -494,7 +497,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677910362915</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL-00047" summary="New draft, and a wee test!">
+      <created>1677911200684</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1677911200684</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -515,7 +525,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Ooops" />
     <MESSAGE value="Changes to reduce image size (hopefully this will reduce bandwidth?)" />
     <MESSAGE value="Too potato, upped the quality" />
     <MESSAGE value="Switched to python 3.10, updated libraries, and switched from aiohttp to httpx" />
@@ -540,7 +549,8 @@
     <MESSAGE value="New post to super confirm it works!" />
     <MESSAGE value="Upgrading to python 3.11 because why the hell not" />
     <MESSAGE value="Upgrading to python 3.11 because why the hell not. Ooops missed my requirements file" />
-    <option name="LAST_COMMIT_MESSAGE" value="Upgrading to python 3.11 because why the hell not. Ooops missed my requirements file" />
+    <MESSAGE value="New draft, and a wee test!" />
+    <option name="LAST_COMMIT_MESSAGE" value="New draft, and a wee test!" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api_website$app.coverage" NAME="app Coverage Results" MODIFIED="1677909626688" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
