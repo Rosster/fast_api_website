@@ -4,13 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="New draft, and a wee test!">
-      <change beforePath="$PROJECT_DIR$/.idea/FastAPI_Static.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/FastAPI_Static.iml" afterDir="false" />
+    <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="Made htmx global, switched the header image to the htmx version, also made it click the explanation image when you tap the image.">
+      <change afterPath="$PROJECT_DIR$/templates/terminal.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/art.jinja.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/art.jinja.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/base_scripts.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/base_scripts.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/rpsk-styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/rpsk-styles.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base_document.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base_document.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/post_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/post_index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/trying_htmx.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/trying_htmx.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -173,7 +172,7 @@
       <workItem from="1677907596187" duration="43000" />
       <workItem from="1677907666763" duration="1253000" />
       <workItem from="1677909152342" duration="359000" />
-      <workItem from="1677909519028" duration="6263000" />
+      <workItem from="1677909519028" duration="18661000" />
     </task>
     <task id="LOCAL-00001" summary="Added procfile?">
       <created>1595184213534</created>
@@ -504,7 +503,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677911200684</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="Made htmx global, switched the header image to the htmx version, also made it click the explanation image when you tap the image.">
+      <created>1678585615114</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1678585615114</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -525,7 +531,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Changes to reduce image size (hopefully this will reduce bandwidth?)" />
     <MESSAGE value="Too potato, upped the quality" />
     <MESSAGE value="Switched to python 3.10, updated libraries, and switched from aiohttp to httpx" />
     <MESSAGE value="Ditched old requirements, because github was yelling at me" />
@@ -550,7 +555,8 @@
     <MESSAGE value="Upgrading to python 3.11 because why the hell not" />
     <MESSAGE value="Upgrading to python 3.11 because why the hell not. Ooops missed my requirements file" />
     <MESSAGE value="New draft, and a wee test!" />
-    <option name="LAST_COMMIT_MESSAGE" value="New draft, and a wee test!" />
+    <MESSAGE value="Made htmx global, switched the header image to the htmx version, also made it click the explanation image when you tap the image." />
+    <option name="LAST_COMMIT_MESSAGE" value="Made htmx global, switched the header image to the htmx version, also made it click the explanation image when you tap the image." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api_website$app.coverage" NAME="app Coverage Results" MODIFIED="1677909626688" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

@@ -135,6 +135,24 @@ class SpaceImage {
 }
 
 
+class TerminalManager {
+    constructor() {
+        this.row = document.getElementById('terminal');
+        this.checkbox = document.getElementById('terminal_text_input');
+        this.textarea = document.getElementById('terminal_content');
+        this.prompt = document.getElementById('terminal_prompt');
+
+        this.textarea.addEventListener('keyup', () => this.resize_row());
+        this.checkbox.addEventListener('change', () => this.resize_row());
+    }
+
+    resize_row() {
+        this.row.style.height = '0';
+        this.row.style.height = `${this.textarea.scrollHeight||this.prompt.scrollHeight}px`;
+    }
+}
+
+
 class FineArt {
     constructor (el) {
         this.el = el;
@@ -188,6 +206,8 @@ window.onload = function () {
             node.textContent = smarten(node.textContent);
         }
     }
+
+    let terminal_manager = new TerminalManager();
 };
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -200,5 +220,7 @@ document.addEventListener("DOMContentLoaded", function() {
             space.draw();
         }
     }
+
+
 
 });

@@ -1,0 +1,5 @@
+<div id="terminal" class="terminal_row">
+    <label class="terminal_prompt" id="terminal_prompt" for="terminal_text_input"><code>>>></code></label>
+    <input type="checkbox" id="terminal_text_input" />
+    <textarea class="terminal_content" id="terminal_content" hx-post="/terminal" hx-trigger="keydown[shiftKey&&key=='Enter']"></textarea>
+</div>
