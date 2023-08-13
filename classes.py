@@ -125,7 +125,8 @@ class PostInMemoryDatabase:
 
     def __init__(self):
 
-        self.connection_str = 'file:memdb?mode=memory&cache=shared&uri=true'
+        # self.connection_str = 'file:memdb?mode=memory&cache=shared&uri=true'
+        self.connection_str = 'posts.db'
         self.content_organizer = None
         self.fields: list[str]|None = None
 
@@ -154,7 +155,6 @@ class PostInMemoryDatabase:
             """, [(post.title, post.metadata.get('keywords', ''), post.text)
                   for post in self.content_organizer.post_lookup.values()])
             await db.commit()
-            print("WROTE SOME POSTS")
 
     async def _query(self, query_str: str, params: Optional[Iterable[Any]] = None) -> list[dict]:
         async with aiosqlite.connect(self.connection_str) as db:
