@@ -154,6 +154,7 @@ class PostInMemoryDatabase:
             """, [(post.title, post.metadata.get('keywords', ''), post.text)
                   for post in self.content_organizer.post_lookup.values()])
             await db.commit()
+            print("WROTE SOME POSTS")
 
     async def _query(self, query_str: str, params: Optional[Iterable[Any]] = None) -> list[dict]:
         async with aiosqlite.connect(self.connection_str) as db:

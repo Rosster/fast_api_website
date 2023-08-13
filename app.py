@@ -26,7 +26,6 @@ sunset_images = images_cloudinary.SunsetGIFs()
 ###################
 @app.on_event("startup")
 async def setup_db():
-    print("Starting up!")
     await post_db.setup(content_organizer=content_organizer)
 
 
