@@ -182,11 +182,6 @@ class PostInMemoryDatabase:
         return await self._query(query_str=match_query, params=(match_str,))
 
 
-
-
-
-
-
 # noinspection PyArgumentList
 class ContentOrganizer:
     def __init__(self, template_folder: str = "templates"):
