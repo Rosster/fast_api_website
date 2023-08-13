@@ -125,8 +125,8 @@ class PostInMemoryDatabase:
 
     def __init__(self):
 
-        self.connection_str = 'file:memdb?mode=memory&cache=shared&uri=true'
-        # self.connection_str = 'posts.db?cache=shared'
+        # self.connection_str = 'file:memdb?mode=memory&cache=shared&uri=true'
+        self.connection_str = 'posts.db?cache=shared'
         self.content_organizer = None
         self.fields: list[str]|None = None
 
