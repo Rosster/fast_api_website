@@ -125,8 +125,8 @@ class PostInMemoryDatabase:
 
     def __init__(self):
 
-        # self.connection_str = 'file:memdb?mode=memory&cache=shared&uri=true'
-        self.connection_str = 'posts.db?cache=shared'
+        self.connection_str = 'file:memdb?mode=memory&cache=shared&uri=true'
+        # self.connection_str = 'posts.db?cache=shared'
         self.content_organizer = None
         self.fields: list[str]|None = None
 
@@ -166,7 +166,7 @@ class PostInMemoryDatabase:
     async def match_posts(self, match_str: str) -> list:
         match_query = f'''
             with snippets as (
-                SELECT 
+                SELECT DISTINCT
                 {', '.join(self.fields)},
                 {', '.join([f"snippet(posts, {idx}, '<b>', '</b>', '...', 8) as {field}_snippet" for idx, field in enumerate(self.fields)])}
                 FROM posts 
