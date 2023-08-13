@@ -1,0 +1,21 @@
+{% extends "base_document.html" %}
+{% block title %}Just Some Minor Updates{% endblock %}
+{% block content %}
+<meta name="type" content="blog_post">
+<meta name="keywords" content="search font htmx sqlite fts5">
+<meta name="timestamp" content="202308111954">
+<article class="no-top-padding">
+    <h1>Search and Fonts</h1>
+    {%- call preview_section() -%}
+        I'm proud to say that I have not updated the version of python! Still rockin' the 3.11. I added a search bar, really leaning into some fun HTMX stuff. Also, it's using the sqlite full text search as a backend. Has anyone done that ever? <em>I think not.</em>
+    {% endcall %}
+    <section>
+        <p>
+            Oh! I also switched to a very "DnD chic" font, IM Fell, which <a href="https://www.linyangchen.com/Typography-Fell-Types-font">this article</a> turned me on to. Not sure I'll keep it. It might be a bit <strong>too</strong> D&D chic, but hey, I like the way it looks against this parchment-ey colored background.
+        </p>
+        <p>
+            What else? I added a search function, which was a great deal of fun, albeit overkill for a blog with like 8 posts. The fun part (to me...only to me) was how I did it. I'm using the SQLite full text search tooling, and basically loading all the posts into an in-memory fts5 database.{% call marginnote("mn-how-did-it-go") %}SQLite's <a href="https://www.sqlite.org/fts5.html">full text search</a>, much like SQLite itself, is a lil' champ. It doesn't get fancy, but it seems to do just wht I need out of the box. Could I use something else? Probably. Would it do much better for my <em>extremely limited</em> use case? Nah.{% endcall %} The search bar really leans into some htmx capabilities; like, there's no javascript. Who needs it? Not me, that's who. Also, I'm using the vanilla html "search" input type. The fun part there? Styling the built-in button. You've gotta mess around with this fun stuff: <code class="css">input[type="search"]::-webkit-search-cancel-button</code>. Good times!
+        </p>
+    </section>
+</article>
+{% endblock %}

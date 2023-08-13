@@ -6,7 +6,7 @@
     <link rel="stylesheet"
       href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
-    <script src="https://unpkg.com/htmx.org@1.8.6"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.4"></script>
 
 
     <script src="{{ url_for('static', path='/base_scripts.js') }}"></script>
@@ -58,9 +58,9 @@
     {% block content %}
 
     {% endblock %}
-{#    {% block terminal %}#}
-{#        {% include 'terminal.html' %}#}
-{#    {% endblock %}#}
+    {% block terminal %}
+        {% include 'terminal.html' %}
+    {% endblock %}
 </body>
 
 </html>

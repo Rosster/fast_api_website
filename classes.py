@@ -7,11 +7,13 @@ import os
 from random import sample
 import re
 from time import time
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, AsyncIterator, Iterable, Any
 from urllib.parse import quote_plus, quote
 from email import utils
 
+from bs4 import BeautifulSoup
 from expiringdict import ExpiringDict
+import aiosqlite
 
 
 def suffix(d):
@@ -47,6 +49,12 @@ class Content:
         with open(self.abs_template_path) as template:
             self.raw_html = template.read()
 
+        # removing the header and title block (otherwise it shows up in the text
+        self.text = self.get_text(
+            re.sub(r'(<h1>.*?</h1>)|({% block title %}.*?{% endblock %})',
+                   '',
+                   self.raw_html))
+
         self.metadata = dict(re.findall(r'<meta name="(?P<name>.+)" content="(?P<content>.+)">',
                                         self.raw_html))
 
@@ -81,6 +89,12 @@ class Content:
     def timestamp(self) -> int:
         """Expected to be the format YYYYMMDDHHMM"""
         return int(self.metadata.get('timestamp', 0))
+    @property
+    def datetime(self) -> None|datetime:
+        """It's baby's first walrus :)"""
+        if (ts := self.metadata.get('timestamp')) is None:
+            return None
+        return datetime.strptime(ts, '%Y%m%d%H%M')
 
     @property
     def formatted_date(self) -> str:
@@ -95,6 +109,82 @@ class Content:
             return utils.format_datetime(datetime.strptime(self.metadata.get('timestamp'), '%Y%m%d%H%M'))
         else:
             return ''
+
+    @classmethod
+    def get_text(cls, post_html: str) -> str:
+        stripped_text = ' '.join(BeautifulSoup(post_html, features="html.parser").get_text().split())
+        # We have to do a bit of extra work to ditch the jinja elements
+        stripped_text = re.sub(r'\{\%.*?\%\}', '', stripped_text)
+        return stripped_text
+
+
+class PostInMemoryDatabase:
+    """
+    Based in part off this: https://blog.osull.com/2022/06/27/async-in-memory-sqlite-sqlalchemy-database-for-fastapi/
+    """
+
+    def __init__(self):
+
+        self.connection_str = 'file:memdb?mode=memory&cache=shared&uri=true'
+        self.content_organizer = None
+        self.fields: list[str]|None = None
+
+    async def setup(self,
+                    content_organizer,
+                    fields = ('title', 'keywords', 'text')):
+        self.content_organizer = content_organizer
+        self.fields = fields
+
+        async with aiosqlite.connect(self.connection_str) as db:
+
+            await db.execute("""
+                drop table if exists posts;
+            """)
+            await db.commit()
+
+            await db.execute(f"""            
+                create virtual table posts using fts5(
+                    {','.join(fields)}
+                );
+            """)
+            await db.commit()
+
+            await db.executemany("""
+                insert into posts values(?, ?, ?);
+            """, [(post.title, post.metadata.get('keywords', ''), post.text)
+                  for post in self.content_organizer.post_lookup.values()])
+            await db.commit()
+
+    async def _query(self, query_str: str, params: Optional[Iterable[Any]] = None) -> list[dict]:
+        async with aiosqlite.connect(self.connection_str) as db:
+            db.row_factory = aiosqlite.Row
+            async with db.execute(query_str, parameters=params) as cursor:
+                rows = await cursor.fetchall()
+        return list(map(dict, rows))
+
+    async def match_posts(self, match_str: str) -> list:
+        match_query = f'''
+            with snippets as (
+                SELECT 
+                {', '.join(self.fields)},
+                {', '.join([f"snippet(posts, {idx}, '<b>', '</b>', '...', 8) as {field}_snippet" for idx, field in enumerate(self.fields)])}
+                FROM posts 
+                WHERE posts MATCH ?
+                order by rank
+            )
+            select 
+                {', '.join(self.fields)},
+                {', '.join([f'{field}_snippet' for field in self.fields])},
+                {', '.join([f'instr({field}, trim({field}_snippet, ".")) = 0 as {field}_match' for field in self.fields])}
+            from snippets
+            '''
+
+        return await self._query(query_str=match_query, params=(match_str,))
+
+
+
+
+
 
 
 # noinspection PyArgumentList
@@ -191,7 +281,7 @@ class ArtApi:
     @property
     async def random_object(self):
         # a bit of a hack here to drop art that lack images
-        if time() < self.last_accessed + 10 and self.last_object and self.last_object['primaryImageSmall']:
+        if time() < self.last_accessed + 10 and self.last_object and self.last_object.get('primaryImageSmall'):
             return self.last_object
 
         matches = await self.matching_objects

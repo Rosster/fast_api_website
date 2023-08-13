@@ -207,7 +207,6 @@ window.onload = function () {
         }
     }
 
-    // let terminal_manager = new TerminalManager();
 };
 
 document.addEventListener("DOMContentLoaded", function() {

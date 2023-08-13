@@ -15,9 +15,23 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory='templates')
 
 content_organizer = classes.ContentOrganizer()
+post_db = classes.PostInMemoryDatabase()
 art_curator = classes.Curator()
 asteroids = classes.AsteroidAstronomer(n_days_from_current=6) # One week
 sunset_images = images_cloudinary.SunsetGIFs()
+
+
+###################
+# Startup Section #
+###################
+@app.on_event("startup")
+async def setup_db():
+    await post_db.setup(content_organizer=content_organizer)
+
+
+#########################
+# HTML Endpoint Section #
+#########################
 
 
 @app.get('/')
@@ -49,26 +63,6 @@ async def post_page(request: Request, post: Optional[str] = Query(None,
         return RedirectResponse('/')
 
 
-@app.get('/random_art')
-async def random_art(art_type: Optional[str] = Query(None,
-                                                     max_length=200,
-                                                     regex=f"^[a-z]+$")):
-    if not art_type:
-        art_type = 'landscape'
-
-    results = await art_curator.get_sample(art_type)
-    for attempt_no in range(10):
-        if not results['primaryImageSmall']:
-            results = await art_curator.get_sample(art_type)
-        else:
-            break
-
-    results['title_quote_plus'] = quote(results['title'])
-    results['artist_quote_plus'] = quote(results['artistDisplayName'])
-
-    return results
-
-
 @app.get('/random_art_html')
 async def random_art_html(request: Request, art_type: Optional[str] = Query(None,
                                                                             max_length=200,
@@ -80,6 +74,41 @@ async def random_art_html(request: Request, art_type: Optional[str] = Query(None
                                        **art_obj})
 
 
+@app.get('/terminal')
+async def terminal(request: Request, query: str | None = Query(None, max_length=200)):
+    posts = await post_db.match_posts(match_str=query) if query else []
+    for post in posts:
+        post['raw_post'] = content_organizer.post_lookup[post['title'].lower()]
+
+    return templates.TemplateResponse("terminal_output.jinja.html",
+                                      {'request': request,
+                                       'results': posts})
+
+#########################
+# JSON Endpoint Section #
+#########################
+
+
+@app.get('/random_art')
+async def random_art(art_type: Optional[str] = Query(None,
+                                                     max_length=200,
+                                                     regex=f"^[a-z]+$")):
+    if not art_type:
+        art_type = 'landscape'
+
+    results = await art_curator.get_sample(art_type)
+    for attempt_no in range(10):
+        if not results.get('primaryImageSmall'):
+            results = await art_curator.get_sample(art_type)
+        else:
+            break
+
+    results['title_quote_plus'] = quote(results['title'])
+    results['artist_quote_plus'] = quote(results['artistDisplayName'])
+
+    return results
+
+
 @app.get('/asteroid_plot_data')
 async def asteroid_plot_data():
     return await asteroids.get_asteroid_data_for_plot()
@@ -89,6 +118,10 @@ async def asteroid_plot_data():
 async def recent_sunset_gif():
     return RedirectResponse(sunset_images.most_recent_url)
 
+
+###############
+# RSS Section #
+###############
 
 @app.get('/rss')
 async def rss(request: Request):

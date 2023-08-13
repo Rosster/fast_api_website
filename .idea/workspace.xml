@@ -4,11 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="Messing around with my terminal functionality! No endpoint yet, I'm just pushing to test behavior on mobile...">
+    <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="Reverting because it's awful on mobile :sob:">
+      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/post_9_quick_update.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/terminal_output.jinja.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/terminal_search_result.jinja.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev Notebook.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Dev Notebook.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/base_scripts.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/base_scripts.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/rpsk-styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/rpsk-styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/tufte.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/tufte.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base_document.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base_document.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/terminal.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/terminal.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,20 +78,27 @@
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/rosskelly/Development/repositories/fast_api_website/templates",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/rosskelly/Development/repositories/fast_api_website/templates&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;sqlite&quot;
+    ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/templates" />
@@ -171,14 +189,16 @@
       <workItem from="1677907596187" duration="43000" />
       <workItem from="1677907666763" duration="1253000" />
       <workItem from="1677909152342" duration="359000" />
-      <workItem from="1677909519028" duration="19724000" />
-    </task>
-    <task id="LOCAL-00001" summary="Added procfile?">
-      <created>1595184213534</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1595184213534</updated>
+      <workItem from="1677909519028" duration="22535000" />
+      <workItem from="1678816916809" duration="118000" />
+      <workItem from="1678817563674" duration="32547000" />
+      <workItem from="1680654882482" duration="7798000" />
+      <workItem from="1682004004534" duration="3099000" />
+      <workItem from="1684287688538" duration="595000" />
+      <workItem from="1686256809779" duration="598000" />
+      <workItem from="1688255906190" duration="126000" />
+      <workItem from="1691165993517" duration="9148000" />
+      <workItem from="1691883970782" duration="837000" />
     </task>
     <task id="LOCAL-00002" summary="Added runtime">
       <created>1595293182931</created>
@@ -516,7 +536,14 @@
       <option name="project" value="LOCAL" />
       <updated>1678768388367</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="Reverting because it's awful on mobile :sob:">
+      <created>1678769623069</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1678769623069</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -537,7 +564,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Switched to python 3.10, updated libraries, and switched from aiohttp to httpx" />
     <MESSAGE value="Ditched old requirements, because github was yelling at me" />
     <MESSAGE value="Added hasImage flag!" />
     <MESSAGE value="Htmx is working!" />
@@ -562,9 +588,10 @@
     <MESSAGE value="New draft, and a wee test!" />
     <MESSAGE value="Made htmx global, switched the header image to the htmx version, also made it click the explanation image when you tap the image." />
     <MESSAGE value="Messing around with my terminal functionality! No endpoint yet, I'm just pushing to test behavior on mobile..." />
-    <option name="LAST_COMMIT_MESSAGE" value="Messing around with my terminal functionality! No endpoint yet, I'm just pushing to test behavior on mobile..." />
+    <MESSAGE value="Reverting because it's awful on mobile :sob:" />
+    <option name="LAST_COMMIT_MESSAGE" value="Reverting because it's awful on mobile :sob:" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/fast_api_website$app.coverage" NAME="app Coverage Results" MODIFIED="1677909626688" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/fast_api_website$app.coverage" NAME="app Coverage Results" MODIFIED="1680833488693" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
