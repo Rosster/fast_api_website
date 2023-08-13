@@ -144,7 +144,7 @@ class PostInMemoryDatabase:
             await db.commit()
 
             await db.execute(f"""            
-                create virtual table posts using fts5(
+                create virtual table if not exists posts using fts5(
                     {','.join(fields)}
                 );
             """)

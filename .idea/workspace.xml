@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="Hmmm, debugging the db not starting...more">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="Trying with a not-in-memory db, shared cache? It's not very happy with sqlite...">
       <change beforePath="$PROJECT_DIR$/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -185,21 +184,7 @@
       <workItem from="1686256809779" duration="598000" />
       <workItem from="1688255906190" duration="126000" />
       <workItem from="1691165993517" duration="9148000" />
-      <workItem from="1691883970782" duration="1946000" />
-    </task>
-    <task id="LOCAL-00005" summary="Got the first post going!  Added multiple post functionality, for that matter.  Along with some async refactoring and js for curly quotes!">
-      <created>1595797157383</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1595797157383</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Some improvements for speed, along with post edits.">
-      <created>1595907661054</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1595907661054</updated>
+      <workItem from="1691883970782" duration="2324000" />
     </task>
     <task id="LOCAL-00007" summary="Update to python 3.8.5">
       <created>1595908100258</created>
@@ -530,7 +515,21 @@
       <option name="project" value="LOCAL" />
       <updated>1691885621388</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="Trying with a not-in-memory db">
+      <created>1691886009687</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1691886009687</updated>
+    </task>
+    <task id="LOCAL-00055" summary="Trying with a not-in-memory db, shared cache? It's not very happy with sqlite...">
+      <created>1691886208533</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1691886208533</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -551,8 +550,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Bolded htmx in a post to test push functionality on the new compy" />
-    <MESSAGE value="Another tiny change to make sure deployments work" />
     <MESSAGE value="Updated libraries across the board! I deserve some sort of award if this runs on the first try" />
     <MESSAGE value="Some more changes to make it work..." />
     <MESSAGE value="Charset normalizer is being rude" />
@@ -576,7 +573,9 @@
     <MESSAGE value="New Post! Also sqlite search, and a new font!" />
     <MESSAGE value="Hmmm, debugging the db not starting" />
     <MESSAGE value="Hmmm, debugging the db not starting...more" />
-    <option name="LAST_COMMIT_MESSAGE" value="Hmmm, debugging the db not starting...more" />
+    <MESSAGE value="Trying with a not-in-memory db" />
+    <MESSAGE value="Trying with a not-in-memory db, shared cache? It's not very happy with sqlite..." />
+    <option name="LAST_COMMIT_MESSAGE" value="Trying with a not-in-memory db, shared cache? It's not very happy with sqlite..." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api_website$app.coverage" NAME="app Coverage Results" MODIFIED="1680833488693" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
