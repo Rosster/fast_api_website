@@ -125,6 +125,7 @@ class PostInMemoryDatabase:
 
     def __init__(self):
 
+        # This doesn't werk on heroku. Sad.
         # self.connection_str = 'file:memdb?mode=memory&cache=shared&uri=true'
         self.connection_str = 'posts.db?cache=shared'
         self.content_organizer = None
@@ -150,10 +151,23 @@ class PostInMemoryDatabase:
             """)
             await db.commit()
 
-            await db.executemany("""
+            # await db.executemany("""
+            #     insert into posts values(?, ?, ?);
+            # """, [(post.title, post.metadata.get('keywords', ''), post.text)
+            #       for post in self.content_organizer.post_lookup.values()])
+            # await db.commit()
+            await asyncio.gather(*[self._upsert_post(post) for post in self.content_organizer.post_lookup.values()])
+
+    async def _upsert_post(self, post: Content) -> None:
+        async with aiosqlite.connect(self.connection_str) as db:
+            await db.execute("""
+                delete from posts
+                where title = ?;
+                """,(post.title,))
+
+            await db.execute("""
                 insert into posts values(?, ?, ?);
-            """, [(post.title, post.metadata.get('keywords', ''), post.text)
-                  for post in self.content_organizer.post_lookup.values()])
+            """, (post.title, post.metadata.get('keywords', ''), post.text))
             await db.commit()
 
     async def _query(self, query_str: str, params: Optional[Iterable[Any]] = None) -> list[dict]:
@@ -166,7 +180,7 @@ class PostInMemoryDatabase:
     async def match_posts(self, match_str: str) -> list:
         match_query = f'''
             with snippets as (
-                SELECT DISTINCT
+                SELECT 
                 {', '.join(self.fields)},
                 {', '.join([f"snippet(posts, {idx}, '<b>', '</b>', '...', 8) as {field}_snippet" for idx, field in enumerate(self.fields)])}
                 FROM posts 
