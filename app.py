@@ -1,5 +1,6 @@
 from typing import Optional
 from urllib.parse import quote
+from enum import Enum
 
 from fastapi import FastAPI, Request, Query
 from fastapi.staticfiles import StaticFiles
@@ -16,9 +17,11 @@ templates = Jinja2Templates(directory='templates')
 
 content_organizer = classes.ContentOrganizer()
 post_db = classes.PostInMemoryDatabase()
+PostEnum = Enum('PostEnum', {post: post for post in content_organizer.post_lookup})
 art_curator = classes.Curator()
 asteroids = classes.AsteroidAstronomer(n_days_from_current=6) # One week
 sunset_images = images_cloudinary.SunsetGIFs()
+
 
 
 ###################
@@ -35,12 +38,10 @@ async def setup_db():
 
 
 @app.get('/')
-async def root(request: Request, post: Optional[str] = Query(None,
-                                                             max_length=200,
-                                                             regex=content_organizer.post_regex)):
+async def root(request: Request, post: Optional[PostEnum] = None):
 
-    if post and post.lower() in content_organizer.post_lookup:
-        post = content_organizer.post_lookup[post]
+    if post:
+        post = content_organizer.post_lookup[post.value]
         return templates.TemplateResponse(post.template_file,
                                           {'request': request})
 
@@ -52,11 +53,9 @@ async def root(request: Request, post: Optional[str] = Query(None,
 
 
 @app.get('/posts/{post}')
-async def post_page(request: Request, post: Optional[str] = Query(None,
-                                                                  max_length=200,
-                                                                  regex=content_organizer.post_regex)):
-    if post and post.lower() in content_organizer.post_lookup:
-        post = content_organizer.post_lookup[post]
+async def post_page(request: Request, post: Optional[PostEnum] = None):
+    if post:
+        post = content_organizer.post_lookup[post.value]
         return templates.TemplateResponse(post.template_file,
                                           {'request': request})
     else:
