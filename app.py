@@ -38,7 +38,7 @@ async def setup_db():
 
 @app.get('/')
 async def root(request: Request, post_param: Optional[PostEnum] = None):
-
+    # It's the root!
     if post_param:
         post = content_organizer.post_lookup[post_param.value]
         return templates.TemplateResponse(post.template_file,
