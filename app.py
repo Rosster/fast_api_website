@@ -37,10 +37,10 @@ async def setup_db():
 
 
 @app.get('/')
-async def root(request: Request, post_param: Optional[PostEnum] = None):
+async def root(request: Request, post_name: Optional[PostEnum] = None):
     # It's the root!
-    if post_param:
-        post = content_organizer.post_lookup[post_param.value]
+    if post_name:
+        post = content_organizer.post_lookup[post_name.value]
         return templates.TemplateResponse(post.template_file,
                                           {'request': request})
 
@@ -51,10 +51,11 @@ async def root(request: Request, post_param: Optional[PostEnum] = None):
                                        'posts': posts})
 
 
-@app.get('/posts/{post}')
-async def post_page(request: Request, post_param: Optional[PostEnum] = None):
-    if post_param:
-        post = content_organizer.post_lookup[post_param.value]
+@app.get('/posts/{post_name}')
+async def post_page(request: Request, post_name: Optional[PostEnum] = None):
+    print(post_name)
+    if post_name:
+        post = content_organizer.post_lookup[post_name.value]
         return templates.TemplateResponse(post.template_file,
                                           {'request': request})
     else:
