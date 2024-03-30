@@ -19,9 +19,8 @@ content_organizer = classes.ContentOrganizer()
 post_db = classes.PostInMemoryDatabase()
 PostEnum = Enum('PostEnum', {post: post for post in content_organizer.post_lookup})
 art_curator = classes.Curator()
-asteroids = classes.AsteroidAstronomer(n_days_from_current=6) # One week
+asteroids = classes.AsteroidAstronomer(n_days_from_current=6)  # One week
 sunset_images = images_cloudinary.SunsetGIFs()
-
 
 
 ###################
@@ -38,10 +37,10 @@ async def setup_db():
 
 
 @app.get('/')
-async def root(request: Request, post: Optional[PostEnum] = None):
+async def root(request: Request, post_param: Optional[PostEnum] = None):
 
-    if post:
-        post = content_organizer.post_lookup[post.value]
+    if post_param:
+        post = content_organizer.post_lookup[post_param.value]
         return templates.TemplateResponse(post.template_file,
                                           {'request': request})
 
@@ -53,9 +52,9 @@ async def root(request: Request, post: Optional[PostEnum] = None):
 
 
 @app.get('/posts/{post}')
-async def post_page(request: Request, post: Optional[PostEnum] = None):
-    if post:
-        post = content_organizer.post_lookup[post.value]
+async def post_page(request: Request, post_param: Optional[PostEnum] = None):
+    if post_param:
+        post = content_organizer.post_lookup[post_param.value]
         return templates.TemplateResponse(post.template_file,
                                           {'request': request})
     else:
