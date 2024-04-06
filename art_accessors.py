@@ -6,7 +6,6 @@ import json
 from dataclasses import dataclass, fields
 import cachetools
 from asyncer import asyncify
-import anyio
 
 duckdb.install_extension('json')
 duckdb.load_extension('json')

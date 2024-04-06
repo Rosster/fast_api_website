@@ -19,7 +19,7 @@ templates = Jinja2Templates(directory='templates')
 content_organizer = classes.ContentOrganizer()
 post_db = classes.PostInMemoryDatabase()
 PostEnum = Enum('PostEnum', {post: post for post in content_organizer.post_lookup})
-art_curator = None
+art_curator = MetArtAccessor()
 asteroids = classes.AsteroidAstronomer(n_days_from_current=6)  # One week
 sunset_images = images_cloudinary.SunsetGIFs()
 
