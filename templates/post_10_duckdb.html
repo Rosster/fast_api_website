@@ -1,0 +1,20 @@
+{% extends "base_document.html" %}
+{% block title %}DuckDB and Saying Hi{% endblock %}
+{% block content %}
+<meta name="type" content="blog_post">
+<meta name="keywords" content="duckdb database async">
+<meta name="timestamp" content="202404061645">
+<article class="no-top-padding">
+    <h1>DuckDB!</h1>
+    {%- call preview_section() -%}
+        I refactored the art api for no reason other than I felt like it. Now I'm using duckdb in a convoluted but educational (to me) way. Also, it's been a while, so I oughta check in!
+    {% endcall %}
+    <section>
+        <p>
+            I've got some time on my hands because we're confined to home caring for a recuperating canine (spontaneous pneumothorax, not fun), and I realized that I'm spending more of my time in SQL than python these days, so why not sql it up? I'm basically just instantiating a lil' memory database for the art class and then throwing objects into that. It's rather nice because I can use SQL to parse the json. It's especially cute because I can use a view that has a calculated field that calls a python function. So it's basically a lazy view. But I'm at the mercy of the query planner as to when everything gets executed, so it's not <em>actually</em> usable as a database for arbitrary queries unless you want it to basically run an api call for each object. Am I getting any benefit relative to the prior functionality? Probably not.
+        </p>
+        <figure class="space-fill api-image" title="This is a random image from NASA because I felt like it"></figure>
+
+    </section>
+</article>
+{% endblock %}
