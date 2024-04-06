@@ -8,7 +8,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 
 import classes
-from art_accessors import MetArtAccessor
+# from art_accessors import MetArtAccessor
 import images_cloudinary
 
 app = FastAPI()
@@ -19,7 +19,7 @@ templates = Jinja2Templates(directory='templates')
 content_organizer = classes.ContentOrganizer()
 post_db = classes.PostInMemoryDatabase()
 PostEnum = Enum('PostEnum', {post: post for post in content_organizer.post_lookup})
-art_curator = MetArtAccessor()
+art_curator = None
 asteroids = classes.AsteroidAstronomer(n_days_from_current=6)  # One week
 sunset_images = images_cloudinary.SunsetGIFs()
 
