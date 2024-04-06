@@ -95,10 +95,10 @@ async def random_art(art_type: Optional[str] = Query(None,
     if not art_type:
         art_type = 'landscape'
 
-    # results = await art_curator.get_random_art(art_type)
+    results = await art_curator.get_random_art(art_type)
 
-    # return asdict(results)
-    return {}
+    return asdict(results)
+
 
 @app.get('/asteroid_plot_data')
 async def asteroid_plot_data():

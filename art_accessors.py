@@ -7,10 +7,11 @@ from dataclasses import dataclass, fields
 import cachetools
 from asyncer import asyncify
 
+print('starting')
 duckdb.install_extension('json')
 duckdb.load_extension('json')
 
-
+print('extension loaded')
 @dataclass
 class ArtObject:
     id: str
