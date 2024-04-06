@@ -31,4 +31,6 @@ duckdb==0.10.1
 requests==2.31.0
 cachetools==5.3.3
 asyncer==0.0.5
+numpy==1.26.4
+
 
