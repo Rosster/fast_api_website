@@ -228,88 +228,88 @@ class ContentOrganizer:
             return None
 
 
-class ArtApi:
-    """Inspired by, and dependent upon https://metmuseum.github.io/"""
-    default_object_path = f"{os.getcwd()}{os.sep}ten_landscapes.json"
+# class ArtApi:
+#     """Inspired by, and dependent upon https://metmuseum.github.io/"""
+#     default_object_path = f"{os.getcwd()}{os.sep}ten_landscapes.json"
+#
+#     def __init__(self, art_type: str, max_cache_len=10000, max_age_seconds=43200, new_art_min_sec=0):
+#         """
+#         Api for requesting art data from the kind folks at the met (https://metmuseum.github.io/).
+#         :param art_type: A keyword, used to define the type of art rendered
+#         :param max_cache_len: Default 10000, probably doesn't matter, because it'll time out first
+#         :param max_age_seconds: Default 43200 (12 hours), this mostly governs when the api re-searches for art
+#         :param new_art_min_sec: The api will only re-request after this period (in seconds)
+#         """
+#         self.art_type = art_type
+#         self.cache = ExpiringDict(max_len=max_cache_len, max_age_seconds=max_age_seconds)  # 12 hours!
+#         self.last_accessed = 0
+#         self.last_object = None
+#         self.art_change_period = new_art_min_sec
+#
+#     @property
+#     async def matching_objects(self) -> List[int]:
+#         if f"_{self.art_type}" not in self.cache:
+#             req = await fetch(
+#                 f"https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&q={quote_plus(self.art_type)}"
+#             )
+#             if req.get('message') == 'Not Found':
+#                 print('Reverting to default, landscapes!')
+#                 default_art = json.load(open(self.default_object_path, 'rt'))
+#                 matching_objects = []
+#                 for art_object in default_art:
+#                     matching_objects.append(art_object['objectID'])
+#                 self.cache[f'_{self.art_type}'] = matching_objects
+#             else:
+#                 matching_objects = req['objectIDs']
+#                 self.cache[f'_{self.art_type}'] = matching_objects
+#
+#         executor = concurrent.futures.ThreadPoolExecutor(max_workers=3)
+#         loop = asyncio.get_event_loop()
+#         return await loop.run_in_executor(executor, self.cache.get, f'_{self.art_type}')
+#
+#     async def get_object(self, object_id: int) -> dict:
+#
+#         object_id = int(object_id)
+#
+#         if object_id not in await self.matching_objects:
+#             raise KeyError(f"{object_id} not in art objects!")
+#
+#         if object_id not in self.cache:
+#             art_req = await fetch(
+#                 f"https://collectionapi.metmuseum.org/public/collection/v1/objects/{object_id}"
+#             )
+#             if art_req.get('message') == 'Not Found':
+#                 raise KeyError(f"{object_id} not found via api!")
+#             else:
+#                 self.cache[object_id] = art_req
+#
+#         executor = concurrent.futures.ThreadPoolExecutor(max_workers=3)
+#         loop = asyncio.get_event_loop()
+#
+#         return await loop.run_in_executor(executor, self.cache.get, object_id)
+#
+#     @property
+#     async def random_object(self):
+#         # a bit of a hack here to drop art that lack images
+#         if time() < self.last_accessed + 10 and self.last_object and self.last_object.get('primaryImageSmall'):
+#             return self.last_object
+#
+#         matches = await self.matching_objects
+#         (object_id,) = sample(matches, 1)
+#         art_object = await self.get_object(object_id)
+#         self.last_object = art_object
+#         self.last_accessed = time()
+#         return art_object
 
-    def __init__(self, art_type: str, max_cache_len=10000, max_age_seconds=43200, new_art_min_sec=0):
-        """
-        Api for requesting art data from the kind folks at the met (https://metmuseum.github.io/).
-        :param art_type: A keyword, used to define the type of art rendered
-        :param max_cache_len: Default 10000, probably doesn't matter, because it'll time out first
-        :param max_age_seconds: Default 43200 (12 hours), this mostly governs when the api re-searches for art
-        :param new_art_min_sec: The api will only re-request after this period (in seconds)
-        """
-        self.art_type = art_type
-        self.cache = ExpiringDict(max_len=max_cache_len, max_age_seconds=max_age_seconds)  # 12 hours!
-        self.last_accessed = 0
-        self.last_object = None
-        self.art_change_period = new_art_min_sec
 
-    @property
-    async def matching_objects(self) -> List[int]:
-        if f"_{self.art_type}" not in self.cache:
-            req = await fetch(
-                f"https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&q={quote_plus(self.art_type)}"
-            )
-            if req.get('message') == 'Not Found':
-                print('Reverting to default, landscapes!')
-                default_art = json.load(open(self.default_object_path, 'rt'))
-                matching_objects = []
-                for art_object in default_art:
-                    matching_objects.append(art_object['objectID'])
-                self.cache[f'_{self.art_type}'] = matching_objects
-            else:
-                matching_objects = req['objectIDs']
-                self.cache[f'_{self.art_type}'] = matching_objects
-
-        executor = concurrent.futures.ThreadPoolExecutor(max_workers=3)
-        loop = asyncio.get_event_loop()
-        return await loop.run_in_executor(executor, self.cache.get, f'_{self.art_type}')
-
-    async def get_object(self, object_id: int) -> dict:
-
-        object_id = int(object_id)
-
-        if object_id not in await self.matching_objects:
-            raise KeyError(f"{object_id} not in art objects!")
-
-        if object_id not in self.cache:
-            art_req = await fetch(
-                f"https://collectionapi.metmuseum.org/public/collection/v1/objects/{object_id}"
-            )
-            if art_req.get('message') == 'Not Found':
-                raise KeyError(f"{object_id} not found via api!")
-            else:
-                self.cache[object_id] = art_req
-
-        executor = concurrent.futures.ThreadPoolExecutor(max_workers=3)
-        loop = asyncio.get_event_loop()
-
-        return await loop.run_in_executor(executor, self.cache.get, object_id)
-
-    @property
-    async def random_object(self):
-        # a bit of a hack here to drop art that lack images
-        if time() < self.last_accessed + 10 and self.last_object and self.last_object.get('primaryImageSmall'):
-            return self.last_object
-
-        matches = await self.matching_objects
-        (object_id,) = sample(matches, 1)
-        art_object = await self.get_object(object_id)
-        self.last_object = art_object
-        self.last_accessed = time()
-        return art_object
-
-
-class Curator:
-    def __init__(self):
-        self.collections: Dict[str, ArtApi] = {}
-
-    async def get_sample(self, art_type: str):
-        if art_type not in self.collections:
-            self.collections[art_type] = ArtApi(art_type=art_type)
-        return await self.collections[art_type].random_object
+# class Curator:
+#     def __init__(self):
+#         self.collections: Dict[str, ArtApi] = {}
+#
+#     async def get_sample(self, art_type: str):
+#         if art_type not in self.collections:
+#             self.collections[art_type] = ArtApi(art_type=art_type)
+#         return await self.collections[art_type].random_object
 
 
 class AsteroidAstronomer:

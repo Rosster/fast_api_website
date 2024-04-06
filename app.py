@@ -1,6 +1,6 @@
 from typing import Optional
-from urllib.parse import quote
 from enum import Enum
+from dataclasses import asdict
 
 from fastapi import FastAPI, Request, Query
 from fastapi.staticfiles import StaticFiles
@@ -8,6 +8,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 
 import classes
+from art_accessors import MetArtAccessor
 import images_cloudinary
 
 app = FastAPI()
@@ -18,7 +19,7 @@ templates = Jinja2Templates(directory='templates')
 content_organizer = classes.ContentOrganizer()
 post_db = classes.PostInMemoryDatabase()
 PostEnum = Enum('PostEnum', {post: post for post in content_organizer.post_lookup})
-art_curator = classes.Curator()
+art_curator = MetArtAccessor()
 asteroids = classes.AsteroidAstronomer(n_days_from_current=6)  # One week
 sunset_images = images_cloudinary.SunsetGIFs()
 
@@ -53,7 +54,6 @@ async def root(request: Request, post_name: Optional[PostEnum] = None):
 
 @app.get('/posts/{post_name}')
 async def post_page(request: Request, post_name: Optional[PostEnum] = None):
-    print(post_name)
     if post_name:
         post = content_organizer.post_lookup[post_name.value]
         return templates.TemplateResponse(post.template_file,
@@ -95,17 +95,9 @@ async def random_art(art_type: Optional[str] = Query(None,
     if not art_type:
         art_type = 'landscape'
 
-    results = await art_curator.get_sample(art_type)
-    for attempt_no in range(10):
-        if not results.get('primaryImageSmall'):
-            results = await art_curator.get_sample(art_type)
-        else:
-            break
+    results = await art_curator.get_random_art(art_type)
 
-    results['title_quote_plus'] = quote(results['title'])
-    results['artist_quote_plus'] = quote(results['artistDisplayName'])
-
-    return results
+    return asdict(results)
 
 
 @app.get('/asteroid_plot_data')

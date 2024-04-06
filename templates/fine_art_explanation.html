@@ -14,7 +14,9 @@
                 </p>
         </section>
     </preview>
-    <figure class="art-fill api-image" data-art_type="watercolor"></figure>
+    <figure class="example-art" title="This is a random piece of watercolor art from the Met's collection.">
+        <div hx-get="/random_art_html?art_type=watercolor" hx-trigger="load" hx-swap="outerHTML"><em>Loading...</em></div>
+    </figure>
     <section>
         <p>
             I'm not exactly an educated art consumer.  I love landscapes, though, and I hate hosting my own

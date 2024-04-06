@@ -27,4 +27,8 @@ watchfiles==0.18.1
 websockets==10.4
 beautifulsoup4==4.11.2
 aiosqlite==0.20.0
+duckdb==0.10.1
+requests==2.31.0
+cachetools==5.3.3
+asyncer==0.0.5
 
