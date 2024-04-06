@@ -8,7 +8,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 
 import classes
-# from art_accessors import MetArtAccessor
+from art_accessors import MetArtAccessor
 import images_cloudinary
 
 app = FastAPI()
