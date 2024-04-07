@@ -10,6 +10,7 @@ from asyncer import asyncify
 duckdb.install_extension('json')
 duckdb.load_extension('json')
 
+
 @dataclass
 class ArtObject:
     id: str
@@ -53,11 +54,11 @@ class MetArtAccessor:
         self.search_cache: cachetools.TTLCache[str: tuple] = cachetools.TTLCache(
             maxsize=search_result_cache_size,
             ttl=search_result_cache_ttl_seconds)
-        self.con.create_function("get_met_object", self._get_met_object, side_effects=True)
+        self.con.create_function("get_met_object", self._load_met_object, side_effects=True)
         self.con.create_function("quote", lambda s: quote(str(s)), parameters=[duckdb.typing.VARCHAR],
                                  return_type=duckdb.typing.VARCHAR)
 
-    def _get_met_object(self, object_id: int) -> str:
+    def _load_met_object(self, object_id: int) -> str:
         """
         Gets data for a given Met object. This is registered as a function in the duckdb connection.
         Parameters
@@ -87,10 +88,10 @@ class MetArtAccessor:
         A tuple of integers containing pointers to the objects that match the query string.
         """
         return tuple(requests.get(
-            f"https://collectionapi.metmuseum.org/public/collection/v1/search?q={quote_plus(query_string)}&hasImages"
+            f"https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&q={quote_plus(query_string)}"
         ).json().get('objectIDs', []))
 
-    def _add_search_results(self, query_string: str) -> None:
+    def _add_search_results(self, query_string: str, take_top_fraction=.1) -> None:
         """
         Updates this object's duckdb database with search results from the Met. Uses a view to define the formatted
         search results. Queries from this view will invoke API calls against the Met's endpoint for object details.
@@ -105,7 +106,12 @@ class MetArtAccessor:
         """
         if quote_plus(query_string) not in self.search_cache:
             self._clear_search_results(query_string)
-            self.search_cache[quote_plus(query_string)] = self._execute_search(query_string=query_string)
+            object_ids = self._execute_search(query_string=query_string)
+
+            # The search results are ordered by relevance, and very,
+            # very comprehensive, so only the top chunk are actually good
+            object_ids = object_ids[:int(take_top_fraction*len(object_ids))]
+            self.search_cache[quote_plus(query_string)] = object_ids
         results = self.search_cache[quote_plus(query_string)]
         if results:
             self.con.execute(f"""
@@ -176,6 +182,38 @@ class MetArtAccessor:
         except duckdb.CatalogException:
             pass
 
+    def _get_object(self,
+                    object_id: int) -> None | ArtObject:
+
+        results = self.con.execute(
+            f"""
+                    select 
+                        id,
+                        attribution,
+                        attribution_quoted,
+                        secondary_attribution,
+                        secondary_attribution_quoted,
+                        title,
+                        title_quoted,
+                        raw_creation_date,
+                        null as structured_creation_date,
+                        null as thumbnail_image_url,
+                        small_image_url,
+                        large_image_url,
+                        largest_image_url,
+                        smallest_image_url,
+                        has_image,
+                        null as meta
+
+                    from met_objects_complete where object_id = $object_id""",
+            dict(object_id=object_id)
+        ).fetchall()
+        if results:
+            result = ArtObject(*results[0])
+            return result
+        else:
+            return None
+
     def _get_random_art(self,
                         query_string: str,
                         search_if_absent=False,
@@ -204,31 +242,8 @@ class MetArtAccessor:
         if not random_key:
             return None
 
-        results = self.con.execute(
-            f"""
-            select 
-                id,
-                attribution,
-                attribution_quoted,
-                secondary_attribution,
-                secondary_attribution_quoted,
-                title,
-                title_quoted,
-                raw_creation_date,
-                null as structured_creation_date,
-                null as thumbnail_image_url,
-                small_image_url,
-                large_image_url,
-                largest_image_url,
-                smallest_image_url,
-                has_image,
-                null as meta
-            
-            from met_objects_complete where object_id = $object_id""",
-            dict(object_id=random_key[0])
-        ).fetchall()
-        if results:
-            result = ArtObject(*results[0])
+        result = self._get_object(object_id=random_key[0])
+        if result:
             if not result.has_image and number_of_attempts <= retries_for_image:
                 self._clear_object(object_id=random_key[0])
                 return self._get_random_art(query_string=query_string, retries_for_image=retries_for_image,
@@ -241,3 +256,5 @@ class MetArtAccessor:
         return await asyncify(self._get_random_art)(query_string=query_string,
                                                     retries_for_image=retries_for_image,
                                                     search_if_absent=search_if_absent)
+
+
