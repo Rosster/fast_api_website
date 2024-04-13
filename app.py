@@ -24,7 +24,7 @@ art_curator = MetArtAccessor()
 asteroids = classes.AsteroidAstronomer(n_days_from_current=6)  # One week
 sunset_images = images_cloudinary.SunsetGIFs()
 cme_astronomer = CoronalMassEjectionAstronomer()
-cme_astronomer.load()
+# cme_astronomer.load()
 
 
 ###################
