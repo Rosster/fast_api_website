@@ -5,11 +5,14 @@ from datetime import datetime, timedelta
 import os
 import asyncio
 
-
 class CoronalMassEjectionAstronomer(object):
     def __init__(self, lookback_days=60):
         self.lookback_days = lookback_days
         self.con = duckdb.connect(':memory:')
+        self.con.sql("""
+            SET memory_limit = '75MB';
+            SET max_memory = '75MB';
+            SET threads = 1;""")
         self.start_date = datetime.now() - timedelta(days=self.lookback_days)
         self.end_date = datetime.now()
         self.daily_data = {(datetime.now() - timedelta(days=i)).strftime('%Y-%m-%d'): None
@@ -17,7 +20,7 @@ class CoronalMassEjectionAstronomer(object):
 
     @property
     def is_loaded(self) -> bool:
-        return ('cme_events',) in self.con.sql('show tables').fetchall()
+        return any(self.daily_data.values())
 
     def _load_incremental(self):
         # Check to see if we have today's data
@@ -35,27 +38,6 @@ class CoronalMassEjectionAstronomer(object):
                 break
         self._build_agg_view()
         self._build_views()
-
-    def _build_events(self) -> None:
-        self.con.sql(f"""
-                create or replace view cme_events_view as (
-                        with 
-                        unnested as (
-                            -- explodes the list
-                            select *, unnest(cmeAnalyses) as cmeAnalysis from cme_raw
-                        ),
-                        -- unpacks the struct into columns
-                        exploded as (
-                            select *, unnest(cmeAnalysis) from unnested
-                        )
-                        select 
-                            activityID,
-                            time21_5,
-                            type,
-                            speed,
-                        from exploded
-                    );""")
-
 
     def _build_agg_view(self):
 
@@ -135,19 +117,6 @@ class CoronalMassEjectionAstronomer(object):
                 speed float);
             """)
 
-    def load(self):
-
-        self.con.sql(f"""
-            create or replace table cme_raw as 
-                select 
-                    * 
-                from read_json_auto(
-                    'https://api.nasa.gov/DONKI/CME?startDate={self.start_date.strftime('%Y-%m-%d')}&endDate={self.end_date.strftime('%Y-%m-%d')}&api_key={os.environ['NASA_API_KEY']}'
-                );
-            """)
-        self._build_events()
-        self._build_views()
-
     def _build_table(self) -> GT:
         start_dt = datetime.strptime(min(k for k,v in self.daily_data.items() if v), "%Y-%m-%d")
         end_dt = datetime.strptime(max(k for k,v in self.daily_data.items() if v), "%Y-%m-%d")
@@ -157,7 +126,7 @@ class CoronalMassEjectionAstronomer(object):
         table = GT(summary.drop(['type_rank', '_max_time_bound'], axis=1), rowname_col="type",
                    ).tab_header(
             title="Coronal Mass Ejections",
-            subtitle=f"CMEs from {start_dt.strftime('%B %d, %Y')} to {end_dt.strftime('%B %d, %Y')} ({delta.days:.0f} days)"
+            subtitle=f"CMEs from {start_dt.strftime('%B %d, %Y')} to {end_dt.strftime('%B %d, %Y')} ({delta.days + 1:.0f} days)"
         ).tab_options(
             table_background_color="#fffff8",
         ).tab_stubhead(

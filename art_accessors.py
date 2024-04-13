@@ -11,6 +11,7 @@ duckdb.install_extension('json')
 duckdb.load_extension('json')
 
 
+
 @dataclass
 class ArtObject:
     id: str
@@ -49,6 +50,10 @@ class MetArtAccessor:
         always redo them after this period.
         """
         self.con = duckdb.connect(':memory:')
+        self.con.sql("""
+            SET memory_limit = '50MB';
+            SET max_memory = '50MB';
+            SET threads = 1;""")
         self.object_cache: cachetools.FIFOCache[int: str] = cachetools.FIFOCache(
             maxsize=object_cache_size)
         self.search_cache: cachetools.TTLCache[str: tuple] = cachetools.TTLCache(
