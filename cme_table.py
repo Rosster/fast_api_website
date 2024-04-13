@@ -100,29 +100,39 @@ class CoronalMassEjectionAstronomer(object):
         """)
 
     def load_day(self, day_str: str):
-        self.con.sql(f"""
-            create or replace table cme_events_{day_str.replace('-', '_')} as (
-                with raw as (
-                    select 
-                        * 
-                    from read_json_auto(
-                        'https://api.nasa.gov/DONKI/CME?startDate={day_str}&endDate={day_str}&api_key={os.environ['NASA_API_KEY']}'
-                    )
-                ),
-                unnested as (
-                        -- explodes the list
-                        select *, unnest(cmeAnalyses) as cmeAnalysis from raw
+        try:
+            self.con.sql(f"""
+                create or replace table cme_events_{day_str.replace('-', '_')} as (
+                    with raw as (
+                        select 
+                            * 
+                        from read_json_auto(
+                            'https://api.nasa.gov/DONKI/CME?startDate={day_str}&endDate={day_str}&api_key={os.environ['NASA_API_KEY']}'
+                        )
                     ),
-                -- unpacks the struct into columns
-                exploded as (
-                    select *, unnest(cmeAnalysis) from unnested
-                )
-                select 
-                    activityID,
-                    time21_5,
-                    type,
-                    speed,
-                from exploded);
+                    unnested as (
+                            -- explodes the list
+                            select *, unnest(cmeAnalyses) as cmeAnalysis from raw
+                        ),
+                    -- unpacks the struct into columns
+                    exploded as (
+                        select *, unnest(cmeAnalysis) from unnested
+                    )
+                    select 
+                        activityID,
+                        time21_5,
+                        type,
+                        speed,
+                    from exploded);
+                """)
+        except duckdb.BinderException as err:
+            # This is a hack, but this error will occur when there's no data
+            self.con.sql(f"""
+                create or replace table cme_events_{day_str.replace('-', '_')} 
+                (activityID varchar,
+                time21_5 varchar,
+                type varchar,
+                speed float);
             """)
 
     def load(self):
@@ -166,6 +176,7 @@ class CoronalMassEjectionAstronomer(object):
             fastest=html("Fastest Speed,<br>km/s"),
             speeds=html("Speed for each event")
         ).tab_source_note(
+            source_note=md(
             source_note=md(
                 "Courtesty of the fine folks at the The [Space Weather Database Of Notifications, Knowledge, Information](https://ccmc.gsfc.nasa.gov/tools/DONKI/) (DONKI). Their acronym, not mine. ")
         ).tab_source_note(
