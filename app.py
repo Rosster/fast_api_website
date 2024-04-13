@@ -88,8 +88,7 @@ async def terminal(request: Request, query: str | None = Query(None, max_length=
 
 @app.get('/cme_table')
 async def cme_table(request: Request) -> HTMLResponse:
-    if not cme_astronomer.is_loaded:
-        cme_astronomer.load()
+    cme_astronomer.load_incremental()
     return HTMLResponse(content=await cme_astronomer.table_html(), status_code=200)
 #########################
 # JSON Endpoint Section #

@@ -10,32 +10,63 @@ class CoronalMassEjectionAstronomer(object):
     def __init__(self, lookback_days=60):
         self.lookback_days = lookback_days
         self.con = duckdb.connect(':memory:')
-        self.start_date: None | datetime = None
-        self.end_date: None | datetime = None
+        self.start_date = datetime.now() - timedelta(days=self.lookback_days)
+        self.end_date = datetime.now()
+        self.daily_data = {(datetime.now() - timedelta(days=i)).strftime('%Y-%m-%d'): None
+                           for i in range(0, self.lookback_days)}
 
     @property
     def is_loaded(self) -> bool:
-        return ('cme_raw',) in self.con.sql('show tables').fetchall()
+        return ('cme_events',) in self.con.sql('show tables').fetchall()
 
-    def load(self):
-        self.start_date = datetime.now() - timedelta(days=self.lookback_days)
-        self.end_date = datetime.now()
+    def load_incremental(self):
+        # Check to see if we have today's data
+        today = datetime.now().strftime('%Y-%m-%d')
+        if today not in self.daily_data:
+            self.daily_data[today] = None
+            while len(self.daily_data) > self.lookback_days:
+                min_date = min(self.daily_data)
+                del(self.daily_data[min_date])
+        for date in sorted(self.daily_data.keys(), reverse=True):
+            if not self.daily_data[date]:
+                self.load_day(date)
+                self.daily_data[date] = f"cme_events_{date.replace('-', '_')}"
+                # Only do one
+                break
+        self._build_agg_view()
+        self._build_views()
+
+    def _build_events(self) -> None:
+        self.con.sql(f"""
+                create or replace view cme_events_view as (
+                        with 
+                        unnested as (
+                            -- explodes the list
+                            select *, unnest(cmeAnalyses) as cmeAnalysis from cme_raw
+                        ),
+                        -- unpacks the struct into columns
+                        exploded as (
+                            select *, unnest(cmeAnalysis) from unnested
+                        )
+                        select 
+                            activityID,
+                            time21_5,
+                            type,
+                            speed,
+                        from exploded
+                    );""")
+
+
+    def _build_agg_view(self):
 
         self.con.sql(f"""
-            create or replace table cme_raw as 
-                select 
-                    * 
-                from read_json_auto(
-                    'https://api.nasa.gov/DONKI/CME?startDate={self.start_date.strftime('%Y-%m-%d')}&endDate={self.end_date.strftime('%Y-%m-%d')}&api_key={os.environ['NASA_API_KEY']}'
-                );
-            create or replace view cme_events as (
-                with unnested as (
-                    -- explodes the list
-                    select *, unnest(cmeAnalyses) as cmeAnalysis from cme_raw
-                )
-                -- unpacks the struct into columns
-                select *, unnest(cmeAnalysis) from unnested
-            );
+            create or replace view cme_events_agg_view as (
+                {' union distinct '.join(f'select * from {table_name}' for table_name in self.daily_data.values() if table_name)}
+            )
+        """)
+
+    def _build_views(self) -> None:
+        self.con.sql(f"""
             create or replace view cme_summary as (
                 with all_types as (
                     select unnest(['S','C','O','R','ER']) as type, unnest([1,2,3,4,5]) as type_rank
@@ -44,7 +75,7 @@ class CoronalMassEjectionAstronomer(object):
                     select 
                         min(epoch(strptime(time21_5, '%Y-%m-%dT%H:%MZ'))) as min_time,
                         max(epoch(strptime(time21_5, '%Y-%m-%dT%H:%MZ'))) as max_time,
-                    from cme_events
+                    from cme_events_agg_view
                 )
 
                 select
@@ -61,12 +92,51 @@ class CoronalMassEjectionAstronomer(object):
                             string_agg(speed, ' ' order by time21_5),'')}} as speeds,
                     any_value(max_time) - any_value(min_time) as _max_time_bound
                 from all_types
-                left join cme_events using(type)
+                left join cme_events_agg_view using(type)
                 cross join bounds
                 group by 1,2
                 order by type_rank
             );
+        """)
+
+    def load_day(self, day_str: str):
+        self.con.sql(f"""
+            create or replace table cme_events_{day_str.replace('-', '_')} as (
+                with raw as (
+                    select 
+                        * 
+                    from read_json_auto(
+                        'https://api.nasa.gov/DONKI/CME?startDate={day_str}&endDate={day_str}&api_key={os.environ['NASA_API_KEY']}'
+                    )
+                ),
+                unnested as (
+                        -- explodes the list
+                        select *, unnest(cmeAnalyses) as cmeAnalysis from raw
+                    ),
+                -- unpacks the struct into columns
+                exploded as (
+                    select *, unnest(cmeAnalysis) from unnested
+                )
+                select 
+                    activityID,
+                    time21_5,
+                    type,
+                    speed,
+                from exploded);
             """)
+
+    def load(self):
+
+        self.con.sql(f"""
+            create or replace table cme_raw as 
+                select 
+                    * 
+                from read_json_auto(
+                    'https://api.nasa.gov/DONKI/CME?startDate={self.start_date.strftime('%Y-%m-%d')}&endDate={self.end_date.strftime('%Y-%m-%d')}&api_key={os.environ['NASA_API_KEY']}'
+                );
+            """)
+        self._build_events()
+        self._build_views()
 
     def _build_table(self) -> GT:
         summary = self.con.sql('select * from cme_summary').df()
