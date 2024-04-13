@@ -24,6 +24,7 @@ art_curator = MetArtAccessor()
 asteroids = classes.AsteroidAstronomer(n_days_from_current=6)  # One week
 sunset_images = images_cloudinary.SunsetGIFs()
 cme_astronomer = CoronalMassEjectionAstronomer()
+cme_astronomer.load()
 
 
 ###################
@@ -31,7 +32,6 @@ cme_astronomer = CoronalMassEjectionAstronomer()
 ###################
 @app.on_event("startup")
 async def setup_db():
-    cme_astronomer.load()
     await post_db.setup(content_organizer=content_organizer)
 
 
