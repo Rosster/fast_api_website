@@ -3,7 +3,7 @@ from great_tables import GT, md, html, nanoplot_options
 from asyncer import asyncify
 from datetime import datetime, timedelta
 import os
-import anyio
+import asyncio
 
 
 class CoronalMassEjectionAstronomer(object):
@@ -19,7 +19,7 @@ class CoronalMassEjectionAstronomer(object):
     def is_loaded(self) -> bool:
         return ('cme_events',) in self.con.sql('show tables').fetchall()
 
-    def load_incremental(self):
+    def _load_incremental(self):
         # Check to see if we have today's data
         today = datetime.now().strftime('%Y-%m-%d')
         if today not in self.daily_data:
@@ -149,11 +149,15 @@ class CoronalMassEjectionAstronomer(object):
         self._build_views()
 
     def _build_table(self) -> GT:
+        start_dt = datetime.strptime(min(k for k,v in self.daily_data.items() if v), "%Y-%m-%d")
+        end_dt = datetime.strptime(max(k for k,v in self.daily_data.items() if v), "%Y-%m-%d")
+        delta = end_dt - start_dt
+
         summary = self.con.sql('select * from cme_summary').df()
         table = GT(summary.drop(['type_rank', '_max_time_bound'], axis=1), rowname_col="type",
                    ).tab_header(
             title="Coronal Mass Ejections",
-            subtitle="CMEs from the last month"
+            subtitle=f"CMEs from {start_dt.strftime('%B %d, %Y')} to {end_dt.strftime('%B %d, %Y')} ({delta.days:.0f} days)"
         ).tab_options(
             table_background_color="#fffff8",
         ).tab_stubhead(
@@ -188,3 +192,17 @@ class CoronalMassEjectionAstronomer(object):
     async def table_html(self) -> str:
         table = await asyncify(self._build_table)()
         return table.as_raw_html()
+
+    async def load_incremental(self) -> None:
+        await asyncify(self._load_incremental)()
+
+    async def load_in_background(self, period_seconds=60) -> None:
+        while True:
+            await self.load_incremental()
+            await asyncio.sleep(period_seconds)
+
+    async def progress_html(self) -> str:
+        progress_max = len(self.daily_data)
+        progress_current = len([k for k,v in self.daily_data.items() if v])
+
+        return f'<progress id="cme-progress" max="{progress_max}" value="{progress_current}">{progress_current}/{progress_max}</progress>'

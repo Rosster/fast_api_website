@@ -1,6 +1,7 @@
 from typing import Optional
 from enum import Enum
 from dataclasses import asdict
+import asyncio
 
 from fastapi import FastAPI, Request, Query
 from fastapi.staticfiles import StaticFiles
@@ -23,7 +24,7 @@ PostEnum = Enum('PostEnum', {post: post for post in content_organizer.post_looku
 art_curator = MetArtAccessor()
 asteroids = classes.AsteroidAstronomer(n_days_from_current=6)  # One week
 sunset_images = images_cloudinary.SunsetGIFs()
-cme_astronomer = CoronalMassEjectionAstronomer()
+cme_astronomer = CoronalMassEjectionAstronomer(lookback_days=180)
 
 
 ###################
@@ -33,7 +34,9 @@ cme_astronomer = CoronalMassEjectionAstronomer()
 async def setup_db():
     await post_db.setup(content_organizer=content_organizer)
 
-
+@app.on_event("startup")
+async def load_cmes_periodically():
+    asyncio.create_task(cme_astronomer.load_in_background())
 #########################
 # HTML Endpoint Section #
 #########################
@@ -88,8 +91,10 @@ async def terminal(request: Request, query: str | None = Query(None, max_length=
 
 @app.get('/cme_table')
 async def cme_table(request: Request) -> HTMLResponse:
-    cme_astronomer.load_incremental()
-    return HTMLResponse(content=await cme_astronomer.table_html(), status_code=200)
+    # This may break if we somehow miss the startup event, but that's ok
+    cme_html = await cme_astronomer.table_html() + await cme_astronomer.progress_html()
+    return HTMLResponse(content=cme_html, status_code=200)
+
 #########################
 # JSON Endpoint Section #
 #########################

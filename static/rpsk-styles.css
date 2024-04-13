@@ -122,44 +122,21 @@ input[type="search"]::-webkit-search-cancel-button {
     line-height: 1rem;
 }
 
-/*.terminal_row {*/
-/*    display: flex;*/
-/*    background-color: #fffff8;*/
-/*    filter: brightness(95%);*/
-/*    position: fixed;*/
-/*    bottom: 0;*/
-/*    left: 0;*/
-/*    height: 21px;*/
-/*    align-items: stretch;*/
-/*    box-shadow:  2px 0px 5px 5px #fffff8;*/
-/*}*/
-
-/*.terminal_row #terminal_text_input {*/
-/*    display: none;*/
-/*}*/
-
-/*.terminal_prompt {*/
-/*    padding-right: 4px;*/
-/*    margin-bottom: 6px;*/
-/*}*/
-
-/*.terminal_content {*/
-/*    display: none;*/
-/*    position: absolute;*/
-/*    height: 100%;*/
-/*    left: 100%;*/
-/*    outline: none;*/
-/*    border: none;*/
-/*    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;*/
-/*    font-size: 1.0rem;*/
-/*    line-height: 1.42;*/
-/*    -webkit-text-size-adjust: 100%;*/
-/*    padding: 0;*/
-/*}*/
-
-/*.terminal_row > input:checked + * {*/
-/*    width: 100vw;*/
-/*    display: block;*/
-/*    box-shadow:  2px 0px 5px 5px #fffff8;*/
-/*    background-color: #fffff8;*/
-/*}*/
+progress#cme-progress {
+    border-radius: 0;
+    width: 100%;
+    height: 6px;
+}
+progress#cme-progress::-webkit-progress-bar {
+    border-radius: 0;
+    background-color: #ccc;
+}
+progress#cme-progress::-webkit-progress-value {
+    border-radius: 0;
+    background-color: #111;
+}
+progress#cme-progress::-moz-progress-bar {
+    border-radius: 0;
+    width: 100%;
+    height: 6px;
+}
