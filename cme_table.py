@@ -1,4 +1,5 @@
 import duckdb
+import pandas as pd
 from great_tables import GT, md, html, nanoplot_options
 from asyncer import asyncify
 from datetime import datetime, timedelta
@@ -7,17 +8,17 @@ import asyncio
 
 
 class CoronalMassEjectionAstronomer(object):
-    def __init__(self, connection: duckdb.DuckDBPyConnection, lookback_days=60):
+    def __init__(self, lookback_days=60):
         self.lookback_days = lookback_days
-        self.con = connection
         self.start_date = datetime.now() - timedelta(days=self.lookback_days)
         self.end_date = datetime.now()
-        self.daily_data = {(datetime.now() - timedelta(days=i)).strftime('%Y-%m-%d'): None
+        self.daily_data: dict[str, pd.DataFrame | None] = {(datetime.now() - timedelta(days=i)).strftime('%Y-%m-%d'): None
                            for i in range(0, self.lookback_days)}
+        self.current_agg: dict[tuple[str, ...], pd.DataFrame]|None = None
 
     @property
     def is_loaded(self) -> bool:
-        return any(self.daily_data.values())
+        return any(v is not None for v in self.daily_data.values())
 
     def _load_incremental(self):
         # Check to see if we have today's data
@@ -28,25 +29,15 @@ class CoronalMassEjectionAstronomer(object):
                 min_date = min(self.daily_data)
                 del(self.daily_data[min_date])
         for date in sorted(self.daily_data.keys(), reverse=True):
-            if not self.daily_data[date]:
-                self.load_day(date)
-                self.daily_data[date] = f"cme_events_{date.replace('-', '_')}"
+            if self.daily_data[date] is None:
+                self.daily_data[date] = self.load_day(date)
                 # Only do one
                 break
-        self._build_agg_view()
-        self._build_views()
 
-    def _build_agg_view(self):
-
-        self.con.sql(f"""
-            create or replace view cme_events_agg_view as (
-                {' union distinct '.join(f'select * from {table_name}' for table_name in self.daily_data.values() if table_name)}
-            )
-        """)
-
-    def _build_views(self) -> None:
-        self.con.sql(f"""
-            create or replace view cme_summary as (
+    def aggregate(self) -> pd.DataFrame:
+        with duckdb.connect(':memory:') as con:
+            events_df = pd.concat(self.daily_data.values())
+            df = con.sql(f"""
                 with all_types as (
                     select unnest(['S','C','O','R','ER']) as type, unnest([1,2,3,4,5]) as type_rank
                 ),
@@ -54,7 +45,7 @@ class CoronalMassEjectionAstronomer(object):
                     select 
                         min(epoch(strptime(time21_5, '%Y-%m-%dT%H:%MZ'))) as min_time,
                         max(epoch(strptime(time21_5, '%Y-%m-%dT%H:%MZ'))) as max_time,
-                    from cme_events_agg_view
+                    from events_df
                 )
 
                 select
@@ -71,55 +62,63 @@ class CoronalMassEjectionAstronomer(object):
                             string_agg(speed, ' ' order by time21_5),'')}} as speeds,
                     any_value(max_time) - any_value(min_time) as _max_time_bound
                 from all_types
-                left join cme_events_agg_view using(type)
+                left join events_df using(type)
                 cross join bounds
                 group by 1,2
                 order by type_rank
-            );
-        """)
+            """).df()
+        return df.copy()
 
-    def load_day(self, day_str: str):
-        try:
-            self.con.sql(f"""
-                create or replace table cme_events_{day_str.replace('-', '_')} as (
-                    with raw as (
-                        select 
-                            * 
-                        from read_json_auto(
-                            'https://api.nasa.gov/DONKI/CME?startDate={day_str}&endDate={day_str}&api_key={os.environ['NASA_API_KEY']}'
-                        )
-                    ),
-                    unnested as (
-                            -- explodes the list
-                            select *, unnest(cmeAnalyses) as cmeAnalysis from raw
+    def load_day(self, day_str: str) -> pd.DataFrame:
+        with duckdb.connect(':memory:') as con:
+            try:
+                con.sql(f"""
+                    create or replace table cme_events as (
+                        with raw as (
+                            select 
+                                * 
+                            from read_json_auto(
+                                'https://api.nasa.gov/DONKI/CME?startDate={day_str}&endDate={day_str}&api_key={os.environ['NASA_API_KEY']}'
+                            )
                         ),
-                    -- unpacks the struct into columns
-                    exploded as (
-                        select *, unnest(cmeAnalysis) from unnested
-                    )
-                    select 
-                        activityID,
-                        time21_5,
-                        type,
-                        speed,
-                    from exploded);
+                        unnested as (
+                                -- explodes the list
+                                select *, unnest(cmeAnalyses) as cmeAnalysis from raw
+                            ),
+                        -- unpacks the struct into columns
+                        exploded as (
+                            select *, unnest(cmeAnalysis) from unnested
+                        )
+                        select 
+                            activityID,
+                            time21_5,
+                            type,
+                            speed,
+                        from exploded);
+                    """)
+            except duckdb.BinderException as err:
+                # This is a hack, but this error will occur when there's no data
+                con.sql(f"""
+                    create or replace table cme_events
+                    (activityID varchar,
+                    time21_5 varchar,
+                    type varchar,
+                    speed float);
                 """)
-        except duckdb.BinderException as err:
-            # This is a hack, but this error will occur when there's no data
-            self.con.sql(f"""
-                create or replace table cme_events_{day_str.replace('-', '_')} 
-                (activityID varchar,
-                time21_5 varchar,
-                type varchar,
-                speed float);
-            """)
+
+            df = con.sql('select * from cme_events').df()
+        return df.copy()
 
     def _build_table(self) -> GT:
-        start_dt = datetime.strptime(min(k for k,v in self.daily_data.items() if v), "%Y-%m-%d")
-        end_dt = datetime.strptime(max(k for k,v in self.daily_data.items() if v), "%Y-%m-%d")
+        start_dt = datetime.strptime(min(k for k,v in self.daily_data.items() if v is not None), "%Y-%m-%d")
+        end_dt = datetime.strptime(max(k for k,v in self.daily_data.items() if v is not None), "%Y-%m-%d")
         delta = end_dt - start_dt
 
-        summary = self.con.sql('select * from cme_summary').df()
+        key = tuple(sorted(k for k,v in self.daily_data.items() if v is not None))
+        if not self.current_agg or key not in self.current_agg:
+            self.current_agg = {key: self.aggregate()}
+        summary = self.current_agg[key]
+
         table = GT(summary.drop(['type_rank', '_max_time_bound'], axis=1), rowname_col="type",
                    ).tab_header(
             title="Coronal Mass Ejections",
@@ -169,6 +168,6 @@ class CoronalMassEjectionAstronomer(object):
 
     async def progress_html(self) -> str:
         progress_max = len(self.daily_data)
-        progress_current = len([k for k,v in self.daily_data.items() if v])
+        progress_current = len([k for k,v in self.daily_data.items() if v is not None])
 
         return f'<progress id="cme-progress" max="{progress_max}" value="{progress_current}">{progress_current}/{progress_max}</progress>'

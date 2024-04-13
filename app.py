@@ -2,6 +2,8 @@ from typing import Optional
 from enum import Enum
 from dataclasses import asdict
 import asyncio
+import os
+import psutil
 
 from fastapi import FastAPI, Request, Query
 from fastapi.staticfiles import StaticFiles
@@ -16,8 +18,8 @@ import images_cloudinary
 
 connection = duckdb.connect(':memory:')
 connection.sql("""
-            SET memory_limit = '80MB';
-            SET max_memory = '80MB';
+            SET memory_limit = '10MB';
+            SET max_memory = '10MB';
             SET threads = 2;""")
 
 app = FastAPI()
@@ -31,7 +33,7 @@ PostEnum = Enum('PostEnum', {post: post for post in content_organizer.post_looku
 art_curator = MetArtAccessor(connection=connection)
 asteroids = classes.AsteroidAstronomer(n_days_from_current=6)  # One week
 sunset_images = images_cloudinary.SunsetGIFs()
-cme_astronomer = CoronalMassEjectionAstronomer(lookback_days=180, connection=connection)
+cme_astronomer = CoronalMassEjectionAstronomer(lookback_days=180)
 
 
 ###################
@@ -51,6 +53,7 @@ async def load_cmes_periodically():
 
 @app.get('/')
 async def root(request: Request, post_name: Optional[PostEnum] = None):
+    print(psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2)
     # It's the root!
     if post_name:
         post = content_organizer.post_lookup[post_name.value]
