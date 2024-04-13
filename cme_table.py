@@ -177,7 +177,6 @@ class CoronalMassEjectionAstronomer(object):
             speeds=html("Speed for each event")
         ).tab_source_note(
             source_note=md(
-            source_note=md(
                 "Courtesty of the fine folks at the The [Space Weather Database Of Notifications, Knowledge, Information](https://ccmc.gsfc.nasa.gov/tools/DONKI/) (DONKI). Their acronym, not mine. ")
         ).tab_source_note(
             source_note=md(
