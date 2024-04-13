@@ -1,0 +1,46 @@
+{% extends "base_document.html" %}
+{% block title %}Coronal Mass Ejections and Great Tables{% endblock %}
+{% block content %}
+<meta name="type" content="blog_post">
+<meta name="keywords" content="duckdb database nasa cme coronal mass ejection great tables">
+<meta name="timestamp" content="202404102110">
+<article class="no-top-padding">
+    <h1>Coronal Mass Ejections</h1>
+    {%- call preview_section() -%}
+        Another API folks! Nasa has a coronal mass ejection api with a hilarious name. It's a good excuse to really kick duckdb into gear (spoiler: it's still amazing) <em>and</em> I'm taking a look at <code>great tables</code>, a very cool table display library. It's got sparklines!
+    {% endcall %}
+    <section>
+        <figure>
+        <div hx-get="/cme_table" hx-trigger="load" hx-swap="outerHTML"><em>Loading...</em></div>
+        </figure>
+        <p>
+            <span class="newthought">Check it out!</span> I've been wanting to do something with the space weather APIs{% call marginnote("mn-nasa") %}NASA has a <em>wealth</em> of <a href="https://api.nasa.gov/">awesome APIs</a>, and it really makes you appreciate all the work they do. Also the <a href="https://ccmc.gsfc.nasa.gov/tools/DONKI/">names they choose.</a> So. Great. I mean, check out this little dude: <br><img src="https://ccmc.gsfc.nasa.gov/gen/donki-page-icon.webp">{% endcall %} for a while, and it dovetailed nicely with some of my new fave tools, <a href="https://duckdb.org/"><code>duckdb</code></a> and <a href="https://posit-dev.github.io/great-tables/articles/intro.html"><code>great_tables</code></a>.
+        </p>
+        <h2>DuckDB</h2>
+        <p>
+            It's basically a new, <i>shiny</i>, SQLite. I think there are really meaningful distinctions that I, uh, don't care to get into. It's completely embedded, which is great because I never want to manage a database (narrator: that'll probably be his next blog post). Before actually playing around with it, I'd mostly heard of duckdb in the context of running ad hoc queries against flat text files directly in the terminal. Which is super cool, but I have no desire to do that. What I do want to do is look at NASA data. Which is, amazingly, this easy:
+        </p>
+            <pre>
+            <code class="python">
+import duckdb
+that_sweet_cme_data = duckdb.sql(
+                'https://api.nasa.gov/DONKI/CME?api_key=DEMO_KEY').df()
+            </code>
+            </pre>
+        <p>
+            That's it. It's wild. Ok, sure, it's in the category of libraries that abstract so much away that who knows what's going on. That sort of nonsense is what makes python a delight, and I'm <i>here for it</i>. But honestly, what I've found super cool is some of the new query language features described <a href="https://duckdb.org/docs/guides/sql_features/friendly_sql.html">here</a>, <a href="https://duckdb.org/2022/05/04/friendlier-sql.html">here</a>, and <a href="https://duckdb.org/2023/08/23/even-friendlier-sql.html">here</a>. My faves? Reusable column aliases (think <code>select 21 as a_number, a_number * 2 as the_number</code> and <a href="https://duckdb.org/docs/sql/query_syntax/unnest">unnest</a>, which explodes structs into new columns. It's a joy. As opposed to bigquery's unnest. Which only unnests disappointment.
+        </p>
+        <h2>Great Tables</h2>
+        <p>
+            It's a <a href="https://posit-dev.github.io/great-tables/articles/intro.html">python library that makes nicely formatted tables</a>. 'Cause know what's really hard? Making tables actually nice. To the point that there's a whole generation of data scientists (it's me. I'm the generation) who are so drunk on fancy datavis tooling that we forget that the best way to convey information is ordered text and numbers on a grid. Thanks to the finest PM & UX person I know, Phillip Miller, for helping me realize that.
+        </p>
+        <p>
+            <span class="newthought">Anyhoo,</span> what makes great tables nifty{% call marginnote("mn-tables") %}Another <i>wicked</i> logo.<br><img class="add-border" src="https://posit-dev.github.io/great-tables/assets/GT_logo.svg">{% endcall %} is not all the actual good stuff about how it builds and formats tables elegantly (which it does), or that it does so on notebooks and websites consistently (it does that too), but the <a href="https://posit-dev.github.io/great-tables/get-started/nanoplots.html"><b>nanoplots</b></a>. These are sparklines. That fit into a cell on the table. And just work. Sparklines are one of the absolute best ways to illuminate information without totally going overboard into graph-land. They give you just enough information to see trends but no more, and it's great. They're the "this meeting should have been an email" of line charts.{% call marginnote("mn-chartwell") %}A cousin, to my mind, is this <a href="https://www.vectrotype.com/chartwell">remarkable font, chartwell</a> that does some sort of ligature trickery to just let you type numbers and turn them into charts. If it weren't so expensive I would buy it.{% endcall %} All the more wonderful is how you specify the data, just have a space-delimited string of numbers and there you have it. Like magic. In this case I'm actually using a 2D plot, because I wanted a sense of frequency over time. And it works fantastically. <b>And</b>, I learned something! Take a look at any ER CMEs in the table; they come in twos; that's because there are multiple components of the same events. I wouldn't have looked that up if I hadn't seen the plots. So cool.
+        </p>
+        <p>So much chit chat about libraries and I didn't even talk about the sun stuff! Next time!</p>
+
+    </section>
+    <figure class="space-fill api-image" data-image_type="corona"></figure>
+
+</article>
+{% endblock %}

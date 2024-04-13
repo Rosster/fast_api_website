@@ -11,6 +11,10 @@ figure.api-image img {
     -webkit-animation:load_up 2s forwards;
 }
 
+img.add-border {
+    border: 1px solid #cccccc;
+}
+
 @keyframes load_up{
     from{opacity:0}
     to{opacity:1}

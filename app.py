@@ -5,10 +5,11 @@ from dataclasses import asdict
 from fastapi import FastAPI, Request, Query
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, HTMLResponse
 
 import classes
 from art_accessors import MetArtAccessor
+from cme_table import CoronalMassEjectionAstronomer
 import images_cloudinary
 
 app = FastAPI()
@@ -22,6 +23,7 @@ PostEnum = Enum('PostEnum', {post: post for post in content_organizer.post_looku
 art_curator = MetArtAccessor()
 asteroids = classes.AsteroidAstronomer(n_days_from_current=6)  # One week
 sunset_images = images_cloudinary.SunsetGIFs()
+cme_astronomer = CoronalMassEjectionAstronomer()
 
 
 ###################
@@ -29,6 +31,7 @@ sunset_images = images_cloudinary.SunsetGIFs()
 ###################
 @app.on_event("startup")
 async def setup_db():
+    cme_astronomer.load()
     await post_db.setup(content_organizer=content_organizer)
 
 
@@ -83,6 +86,10 @@ async def terminal(request: Request, query: str | None = Query(None, max_length=
                                       {'request': request,
                                        'results': posts})
 
+
+@app.get('/cme_table')
+async def cme_table(request: Request) -> HTMLResponse:
+    return HTMLResponse(content=await cme_astronomer.table_html(), status_code=200)
 #########################
 # JSON Endpoint Section #
 #########################
