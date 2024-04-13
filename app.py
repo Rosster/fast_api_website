@@ -14,7 +14,7 @@ from art_accessors import MetArtAccessor
 from cme_table import CoronalMassEjectionAstronomer
 import images_cloudinary
 
-connection = duckdb.connect(':memory')
+connection = duckdb.connect(':memory:')
 connection.sql("""
             SET memory_limit = '80MB';
             SET max_memory = '80MB';
