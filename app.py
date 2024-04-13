@@ -24,7 +24,6 @@ art_curator = MetArtAccessor()
 asteroids = classes.AsteroidAstronomer(n_days_from_current=6)  # One week
 sunset_images = images_cloudinary.SunsetGIFs()
 cme_astronomer = CoronalMassEjectionAstronomer()
-# cme_astronomer.load()
 
 
 ###################
@@ -89,6 +88,8 @@ async def terminal(request: Request, query: str | None = Query(None, max_length=
 
 @app.get('/cme_table')
 async def cme_table(request: Request) -> HTMLResponse:
+    if not cme_astronomer.is_loaded:
+        cme_astronomer.load()
     return HTMLResponse(content=await cme_astronomer.table_html(), status_code=200)
 #########################
 # JSON Endpoint Section #
