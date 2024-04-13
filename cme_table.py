@@ -5,14 +5,11 @@ from datetime import datetime, timedelta
 import os
 import asyncio
 
+
 class CoronalMassEjectionAstronomer(object):
-    def __init__(self, lookback_days=60):
+    def __init__(self, connection: duckdb.DuckDBPyConnection, lookback_days=60):
         self.lookback_days = lookback_days
-        self.con = duckdb.connect(':memory:')
-        self.con.sql("""
-            SET memory_limit = '75MB';
-            SET max_memory = '75MB';
-            SET threads = 1;""")
+        self.con = connection
         self.start_date = datetime.now() - timedelta(days=self.lookback_days)
         self.end_date = datetime.now()
         self.daily_data = {(datetime.now() - timedelta(days=i)).strftime('%Y-%m-%d'): None
