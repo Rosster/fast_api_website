@@ -1,0 +1,33 @@
+{# A generic html container for pyodide code that's expected to replace itself #}
+{#This needs to be loaded in the containing page:#}
+{#    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js"></script>#}
+    <script type="text/javascript">
+        function loadScript(url, callback) {
+            // Adding the script tag to the head as suggested before
+            var head = document.head;
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = url;
+
+            // Then bind the event to the callback function.
+            // There are several events for cross browser compatibility.
+            script.onreadystatechange = callback;
+            script.onload = callback;
+
+            // Fire the loading
+            head.appendChild(script);
+        }
+
+        async function main(){
+            let pyodide = await loadPyodide()
+            {{ js_content|safe }}
+            pyodide.runPython(`
+{{ python_content|safe }}
+            `)
+        }
+        loadScript("https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js", main)
+    </script>
+
+<div id="{{ id }}">
+</div>
+{{ html_content|safe }}

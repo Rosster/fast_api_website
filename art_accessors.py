@@ -216,6 +216,62 @@ class MetArtAccessor:
         else:
             return None
 
+    def _build_object(self, object_id: int) -> None | ArtObject:
+        with duckdb.connect(':memory:') as con:
+            con.create_function("get_met_object", self._load_met_object, side_effects=True)
+            con.create_function("quote", lambda s: quote(str(s)), parameters=[duckdb.typing.VARCHAR],
+                                     return_type=duckdb.typing.VARCHAR)
+            result = con.sql(f"""
+                with met_objects_intermediate AS (
+                    select {object_id} as object_id, cast(get_met_object(object_id) as JSON) as object_data
+                ),
+                met_objects_complete AS (
+                    select 
+                        object_id,
+                        cast(object_id as string) as id,
+                        object_data->>'$.artistDisplayName' as attribution,
+                        quote(object_data->>'$.artistDisplayName') as attribution_quoted,
+                        object_data->>'$.culture' as secondary_attribution,
+                        quote(object_data->>'$.culture') as secondary_attribution_quoted,
+                        object_data->>'$.title' as title,
+                        quote(object_data->>'$.title') as title_quoted,
+                        object_data->>'$.objectDate' as raw_creation_date,
+                        object_data->>'$.primaryImageSmall' as small_image_url,
+                        object_data->>'$.primaryImage' as large_image_url,
+                        coalesce(object_data->>'$.primaryImage',object_data->>'$.primaryImageSmall') as largest_image_url,
+                        coalesce(object_data->>'$.primaryImageSmall',object_data->>'$.primaryImage') as smallest_image_url,
+                        (largest_image_url is not null and largest_image_url != '') as has_image,
+                        object_data as meta,
+
+                    from met_objects_intermediate
+                )
+                select 
+                    id,
+                    attribution,
+                    attribution_quoted,
+                    secondary_attribution,
+                    secondary_attribution_quoted,
+                    title,
+                    title_quoted,
+                    raw_creation_date,
+                    null as structured_creation_date,
+                    null as thumbnail_image_url,
+                    small_image_url,
+                    large_image_url,
+                    largest_image_url,
+                    smallest_image_url,
+                    has_image,
+                    null as meta
+    
+                from met_objects_complete
+            """).fetchone()
+        if result:
+            result = ArtObject(*result)
+            return result
+        else:
+            return None
+
+
     def _get_random_art(self,
                         query_string: str,
                         search_if_absent=False,

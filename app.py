@@ -15,6 +15,7 @@ import classes
 from art_accessors import MetArtAccessor
 from cme_table import CoronalMassEjectionAstronomer
 import images_cloudinary
+from pyodide_helper import PyoHelper
 
 connection = duckdb.connect(':memory:')
 connection.sql("""
@@ -46,6 +47,7 @@ async def setup_db():
 @app.on_event("startup")
 async def load_cmes_periodically():
     asyncio.create_task(cme_astronomer.load_in_background())
+
 #########################
 # HTML Endpoint Section #
 #########################
@@ -105,6 +107,16 @@ async def cme_table(request: Request) -> HTMLResponse:
     cme_html = await cme_astronomer.table_html() + await cme_astronomer.progress_html()
     return HTMLResponse(content=cme_html, status_code=200)
 
+
+@app.get('/pyodide_cme_table')
+async def pyodide(request: Request):
+    helper = PyoHelper(pyodide_app_name='cme_plot')
+    return templates.TemplateResponse("pyodide_container.jinja.html",
+                                      {'request': request,
+                                       'id': 'TEST',
+                                       'js_content': helper.js_file,
+                                       'python_content': helper.py_file,
+                                       'html_content': await cme_astronomer.progress_html()})
 #########################
 # JSON Endpoint Section #
 #########################
@@ -131,6 +143,15 @@ async def asteroid_plot_data():
 async def recent_sunset_gif():
     return RedirectResponse(sunset_images.most_recent_url)
 
+
+@app.get('/cme_data')
+async def cme_data():
+    return await cme_astronomer.raw_data()
+
+
+@app.get('/cme_summary')
+async def cme_summary():
+    return await cme_astronomer.summary_data()
 
 ###############
 # RSS Section #

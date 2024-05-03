@@ -202,7 +202,7 @@ hljs.initHighlightingOnLoad();
 window.onload = function () {
     for (let node of getTextNodesIn(document)) {
         let parent_tags = parents(node).map(p => p ? p.tagName : null);
-        if (!parent_tags.includes('CODE')){
+        if (parent_tags.includes('P')){
             node.textContent = smarten(node.textContent);
         }
     }
