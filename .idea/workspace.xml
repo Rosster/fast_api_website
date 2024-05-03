@@ -5,16 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3a9d241f-bbd9-40b6-8fef-7788927e69ad" name="Default Changelist" comment="Fixed a bunch of stuff!">
-      <change afterPath="$PROJECT_DIR$/pyodide_content/cme_plot/cme_plot.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyodide_content/cme_plot/cme_plot.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyodide_helper.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/pyodide_container.jinja.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/art_accessors.py" beforeDir="false" afterPath="$PROJECT_DIR$/art_accessors.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cme_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/cme_table.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/base_scripts.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/base_scripts.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +30,12 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Rosster"
+  }
+}]]></component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
       <filtered-out-file-type name="LOCAL_BRANCH" />
@@ -47,6 +44,12 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Rosster/fast_api_website.git",
+    "accountId": "b59f287f-0f97-4329-a065-d8c3c99920f7"
+  }
+}]]></component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/.gitignore" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Procfile" root0="FORCE_HIGHLIGHTING" />
@@ -267,7 +270,7 @@
       <workItem from="1711157225098" duration="1091000" />
       <workItem from="1711414884895" duration="10280000" />
       <workItem from="1711844012588" duration="74028000" />
-      <workItem from="1714697049629" duration="300000" />
+      <workItem from="1714697049629" duration="672000" />
     </task>
     <task id="LOCAL-00011" summary="Syntax highlighting!  How fun!">
       <created>1596994691152</created>

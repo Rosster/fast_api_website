@@ -1,31 +1,13 @@
 import os
-import psutil
-
-print(psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2)
-
 import duckdb
-
-print(psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2)
-
 import pandas as pd
-
-print(psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2)
 # from great_tables import GT, md, html, nanoplot_options
 import great_tables
-
-print(psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2)
 from asyncer import asyncify
-
-print(psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2)
 from datetime import datetime, timedelta
-
-print(psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2)
 import os
-
-print(psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2)
 import asyncio
 
-print(psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2)
 
 ##################
 # HORRIFIC PATCH #
