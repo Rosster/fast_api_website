@@ -13,3 +13,4 @@ great-tables
 uvicorn
 pandas
 jinja2
+gunicorn
