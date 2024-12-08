@@ -5,3 +5,4 @@
 .idea/workspace.xml
 posts.db\?cache=shared
 /.idea
+venv

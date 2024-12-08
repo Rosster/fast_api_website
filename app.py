@@ -16,6 +16,7 @@ from art_accessors import MetArtAccessor
 from cme_table import CoronalMassEjectionAstronomer
 import images_cloudinary
 from pyodide_helper import PyoHelper
+from exoplanets import ExoplanetAstronomer
 
 connection = duckdb.connect(':memory:')
 connection.sql("""
@@ -35,6 +36,7 @@ art_curator = MetArtAccessor(connection=connection)
 asteroids = classes.AsteroidAstronomer(n_days_from_current=6)  # One week
 sunset_images = images_cloudinary.SunsetGIFs()
 cme_astronomer = CoronalMassEjectionAstronomer(lookback_days=180)
+exo_astronomer = ExoplanetAstronomer()
 
 
 ###################
@@ -47,6 +49,10 @@ async def setup_db():
 @app.on_event("startup")
 async def load_cmes_periodically():
     asyncio.create_task(cme_astronomer.load_in_background())
+    
+@app.on_event("startup")
+async def initialize_exoplanets():
+    await exo_astronomer.populate_stellar_hosts()
 
 #########################
 # HTML Endpoint Section #
@@ -82,7 +88,7 @@ async def post_page(request: Request, post_name: Optional[PostEnum] = None):
 @app.get('/random_art_html')
 async def random_art_html(request: Request, art_type: Optional[str] = Query(None,
                                                                             max_length=200,
-                                                                            regex=f"^[a-z]+$")):
+                                                                            regex="^[a-z]+$")):
     art_obj = await random_art(art_type=art_type)
 
     return templates.TemplateResponse("art.jinja.html",
@@ -152,6 +158,12 @@ async def cme_data():
 @app.get('/cme_summary')
 async def cme_summary():
     return await cme_astronomer.summary_data()
+
+@app.get('/exoplanetary_system')
+async def exoplanetary_system(host_star: str):
+    print(host_star)
+    print(exo_astronomer.systems)
+    return exo_astronomer.systems.get(host_star.lower(), {})
 
 ###############
 # RSS Section #

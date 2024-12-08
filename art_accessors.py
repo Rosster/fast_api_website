@@ -3,13 +3,12 @@ import requests
 from datetime import datetime
 from urllib.parse import quote_plus, quote
 import json
-from dataclasses import dataclass, fields
+from dataclasses import dataclass
 import cachetools
 from asyncer import asyncify
 
 duckdb.install_extension('json')
 duckdb.load_extension('json')
-
 
 
 @dataclass

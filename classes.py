@@ -201,7 +201,9 @@ class PostInMemoryDatabase:
 class ContentOrganizer:
     def __init__(self, template_folder: str = "templates"):
         self.template_folder = f"{os.getcwd()}{os.sep}{template_folder}"
-        self.content = self.post_lookup = self.post_regex = None
+        self.content = []
+        self.post_lookup = {}
+        self.post_regex = ''
         self.refresh()
 
     def refresh(self):
