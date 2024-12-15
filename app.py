@@ -1,15 +1,17 @@
+import pytz
 from typing import Optional
 from enum import Enum
 from dataclasses import asdict
 import asyncio
-# import os
-# import psutil
+import random
+import datetime
 
 from fastapi import FastAPI, Request, Query
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse, HTMLResponse
 import duckdb
+from fastapi_utils.tasks import repeat_every
 
 import classes
 from art_accessors import MetArtAccessor
@@ -38,10 +40,10 @@ sunset_images = images_cloudinary.SunsetGIFs()
 cme_astronomer = CoronalMassEjectionAstronomer(lookback_days=180)
 exo_astronomer = ExoplanetAstronomer()
 
-
 ###################
 # Startup Section #
 ###################
+
 @app.on_event("startup")
 async def setup_db():
     await post_db.setup(content_organizer=content_organizer)
@@ -49,15 +51,37 @@ async def setup_db():
 @app.on_event("startup")
 async def load_cmes_periodically():
     asyncio.create_task(cme_astronomer.load_in_background())
-    
+
 @app.on_event("startup")
-async def initialize_exoplanets():
+@repeat_every(seconds=60 * 60 * 24)  # 1 day
+async def post_exoplanets():
     await exo_astronomer.populate_stellar_hosts()
+    
+    # sleep randomly for up to 12 hours
+    # this is just to account for multiple app instances
+    await asyncio.sleep(delay=random.randint(0, 60*60*12))
+    exo_astronomer.update_posts()
+    most_recent_post_dt = max(exo_astronomer.posts.values())
+    
+    if most_recent_post_dt >= (datetime.datetime.now(pytz.utc) - datetime.timedelta(days=1)):
+        # no posting if we've already posted within one day
+        return
+    else:
+        new_hosts = list(
+            sorted(
+                [host_name for host_name in exo_astronomer.systems 
+                    if (host_name not in exo_astronomer.posts 
+                        or exo_astronomer.posts[host_name] < exo_astronomer.systems[host_name]['latest_publication_date']
+                    )
+                ], key=lambda h: exo_astronomer.systems[h]['latest_publication_date']))
+        
+        host = random.sample(new_hosts, 1)[0]
+        await exo_astronomer.post_system(host_name=host)
+
 
 #########################
 # HTML Endpoint Section #
 #########################
-
 
 @app.get('/')
 async def root(request: Request, post_name: Optional[PostEnum] = None):
@@ -159,11 +183,16 @@ async def cme_data():
 async def cme_summary():
     return await cme_astronomer.summary_data()
 
+
 @app.get('/exoplanetary_system')
 async def exoplanetary_system(host_star: str):
-    print(host_star)
-    print(exo_astronomer.systems)
     return exo_astronomer.systems.get(host_star.lower(), {})
+    
+
+@app.get('/random_exoplanetary_system')
+async def random_exoplanetary_system():
+    host = random.sample(list(exo_astronomer.systems), 1)[0]
+    return await exoplanetary_system(host)
 
 ###############
 # RSS Section #
