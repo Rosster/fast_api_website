@@ -9,7 +9,7 @@ requests
 cachetools
 asyncer
 numpy
-great-tables
+great-tables==0.14.0
 uvicorn
 pandas
 jinja2

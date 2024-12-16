@@ -5,7 +5,6 @@ import pandas as pd
 import great_tables
 from asyncer import asyncify
 from datetime import datetime, timedelta
-import os
 import asyncio
 
 
@@ -146,7 +145,7 @@ class CoronalMassEjectionAstronomer(object):
                             speed,
                         from exploded);
                     """)
-            except duckdb.BinderException as err:
+            except duckdb.BinderException:
                 # This is a hack, but this error will occur when there's no data
                 con.sql(f"""
                     create or replace table cme_events
