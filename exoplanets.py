@@ -3,9 +3,10 @@ import math
 import os
 from datetime import datetime
 import pytz
+from itertools import groupby
 
 from classes import fetch
-import pandas as pd
+from dateutil import parser
 import numpy as np
 import atproto
 
@@ -42,21 +43,44 @@ def parse_datetime(pubdate_str: str) -> datetime:
             return datetime(year=2000, month=1, day=1, tzinfo=pytz.utc)
     
 
-def format_planets(planet_df: pd.DataFrame) -> dict:
+def format_planets(planets) -> dict:
+
+    systems = {}
+    n_hosts = len(set(p['hostname'] for p in planets))
+    
+    counter = 0
+    for hostname, system_planets in groupby(sorted(planets, key=lambda p: str(p['hostname']).lower()), key=lambda p: str(p['hostname']).lower()):
+        is_binary = False
+        latest_publication_date = datetime(1900, 1, 1,  tzinfo=pytz.utc)
+        planet_emojis = []
+        planet_names = []
+        planet_radii = []
+        system_planets = list(system_planets)
         
-    emojis_added = planet_df.assign(
-        planet_emoji=planet_df.pl_bmasse.apply(get_planet_emoji),
-        hostname=planet_df.hostname.str.lower(),
-        disc_pubdate=planet_df.disc_pubdate.apply(parse_datetime)
-    )
+        for planet in sorted(system_planets, key=lambda p: p.get('pl_rade', 0) or 0):
+            planet['planet_emoji'] = get_planet_emoji(planet['pl_bmasse'] or 0)
+            planet['disc_pubdate'] = parse_datetime(planet['disc_pubdate'])
+            
+            if planet['cb_flag']:
+                is_binary = True
+            latest_publication_date = max(latest_publication_date, planet['disc_pubdate'])
+            planet_emojis.append(planet['planet_emoji'])
+            planet_names.append(planet['pl_name'])
+            planet_radii.append(planet['pl_rade'] or 0)
+
+            
+        system = dict(
+            is_binary=is_binary,
+            latest_publication_date=latest_publication_date,
+            planet_emojis=planet_emojis,
+            planet_names=planet_names,
+            planet_radii=planet_radii
+        )
         
-    return emojis_added.sort_values('pl_rade').groupby('hostname').agg(
-        is_binary= ('cb_flag', 'max'),
-        latest_publication_date=('disc_pubdate', 'max'),
-        planet_emojis=('planet_emoji', lambda arr: arr.to_list()),
-        planet_names=('pl_name', lambda arr: arr.to_list()),
-        planet_radii=('pl_rade', lambda arr: arr.to_list())
-    ).T.to_dict('dict')
+        counter += 1
+        systems[hostname] = system
+    
+    return systems
 
 
 def render_planets(system: dict, max_orbit=8) -> str:
@@ -165,10 +189,8 @@ class ExoplanetAstronomer:
             query="select hostname, cb_flag, sy_snum, pl_name, disc_pubdate, pl_rade, pl_bmasse, pl_dens from pscomppars",
             format='json'
         ))        
-        systems = format_planets(pd.DataFrame(planets))
-        self.systems.update(
-            systems
-        )
+        self.systems = format_planets(planets)
+
         
     async def render_system(self, host_name: str) -> str:
         if system := self.systems.get(host_name):
@@ -183,10 +205,11 @@ class ExoplanetAstronomer:
             os.environ.get('EXOPLANET_ACCOUNT_KEY')
         )
         posts = {
-            feed.post.record.text.split('\n')[0].lower(): pd.to_datetime(feed.post.record.created_at)
+            feed.post.record.text.split('\n')[0].lower(): parser.parse(feed.post.record.created_at)
             for feed in client.get_author_feed(profile.did).feed
             if hasattr(feed.post.record, 'text') & hasattr(feed.post.record, 'created_at')
         }
+        
         return posts
     
     def update_posts(self) -> None:

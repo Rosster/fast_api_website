@@ -5,6 +5,8 @@ from dataclasses import asdict
 import asyncio
 import random
 import datetime
+# import psutil
+# import os
 
 from fastapi import FastAPI, Request, Query
 from fastapi.staticfiles import StaticFiles
@@ -155,7 +157,7 @@ async def pyodide(request: Request):
 @app.get('/random_art')
 async def random_art(art_type: Optional[str] = Query(None,
                                                      max_length=200,
-                                                     regex=f"^[a-z]+$")):
+                                                     regex="^[a-z]+$")):
     if not art_type:
         art_type = 'landscape'
 
