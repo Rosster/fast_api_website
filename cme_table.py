@@ -60,6 +60,8 @@ class CoronalMassEjectionAstronomer(object):
     def _aggregate(self) -> list[dict]:
         with duckdb.connect(':memory:') as con:
             events = [r for li in self.daily_data_complete.values() for r in li]
+            if not events:
+                return []
             input_fields = ['activityID', 'time21_5', 'type', 'speed', ]
             output_fields = ['type_rank',
                              'type',
@@ -110,8 +112,6 @@ class CoronalMassEjectionAstronomer(object):
                 group by 1,2
                 order by type_rank;"""
                 
-            print(query)
-
             results = con.sql(query).fetchall()
         return [{k: v for k, v in zip(output_fields, row)} for row in results]
 
