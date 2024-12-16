@@ -108,8 +108,7 @@ class CoronalMassEjectionAstronomer(object):
                 left join cme_events using(type)
                 cross join bounds
                 group by 1,2
-                order by type_rank
-            """).fetchall()
+                order by type_rank;""").fetchall()
         return [{k: v for k, v in zip(output_fields, row)} for row in results]
 
     def aggregate(self) -> list[dict]:
